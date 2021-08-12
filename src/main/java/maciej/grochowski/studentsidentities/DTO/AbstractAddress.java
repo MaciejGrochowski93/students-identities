@@ -1,4 +1,4 @@
-package maciej.grochowski.studentsidentities.address;
+package maciej.grochowski.studentsidentities.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

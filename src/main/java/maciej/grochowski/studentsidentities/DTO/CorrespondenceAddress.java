@@ -1,4 +1,4 @@
-package maciej.grochowski.studentsidentities.address;
+package maciej.grochowski.studentsidentities.DTO;
 
 public class CorrespondenceAddress extends AbstractAddress {
     public CorrespondenceAddress(String street, String city, String postalCode) {

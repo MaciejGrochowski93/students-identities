@@ -1,4 +1,4 @@
-package maciej.grochowski.studentsidentities.address;
+package maciej.grochowski.studentsidentities.DTO;
 
 public class PermanentAddress extends AbstractAddress {
     public PermanentAddress(String street, String city, String postalCode) {

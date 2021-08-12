@@ -1,21 +1,34 @@
 package maciej.grochowski.studentsidentities.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
-import maciej.grochowski.studentsidentities.address.CorrespondenceAddress;
-import maciej.grochowski.studentsidentities.address.PermanentAddress;
-import maciej.grochowski.studentsidentities.address.ResidentialAddress;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 @Entity
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class StudentAddress {
 
-    private ResidentialAddress residentialAddress;
-    private PermanentAddress permanentAddress;
-    private CorrespondenceAddress correspondenceAddress;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "address_id")
+    private Integer addressId;
+
+    @Column(name = "student_id")
+    private Integer studentId;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "street")
+    private String street;
+
+    @Column(name = "postal_code")
+    private String postalCode;
+
+    @Column(name = "address_type")
+    private String addressType;
+
+
 }

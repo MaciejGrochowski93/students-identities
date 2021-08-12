@@ -25,7 +25,7 @@ public class Student {
     @Column(name = "first_name")
     private String firstName;
 
-    @Length(max = 20)
+    @Length(min = 1, max = 20, message = "Your middle name must consist of 1 to 20 letters.")
     @Column(name = "middle_name")
     private String middleName;
 
@@ -35,12 +35,11 @@ public class Student {
     private String lastName;
 
     @NotNull(message = "You have to provide your pesel.")
-    @Length(min = 9, max = 9)
+    @Length(min = 11, max = 11)
     @Column(name = "pesel")
     private String pesel;
 
     @NotNull(message = "You have to provide your date of birth.")
     @Column(name = "date_of_birth")
     private LocalDate dob;
-
 }
