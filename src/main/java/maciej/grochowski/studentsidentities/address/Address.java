@@ -5,28 +5,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import maciej.grochowski.studentsidentities.entity.Student;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.data.repository.NoRepositoryBean;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class AbstractAddress {
+public class Address {
 
-    public AbstractAddress(String street, String houseNr, String city, String postalCode, Student student) {
+    public Address(String street, String houseNr, String city, String postalCode, AddressType type) {
         this.street = street;
         this.houseNr = houseNr;
         this.city = city;
         this.postalCode = postalCode;
-        this.student = student;
+        this.type = type;
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NotNull(message = "Please, provide the name of your street.")
@@ -45,7 +43,11 @@ public abstract class AbstractAddress {
     @Length(min = 6, max = 6, message = "Postal code must consist of 6 letters")
     private String postalCode;
 
-    @OneToOne
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AddressType type;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "student_id")
-    private Student student;
+    public Student student;
 }

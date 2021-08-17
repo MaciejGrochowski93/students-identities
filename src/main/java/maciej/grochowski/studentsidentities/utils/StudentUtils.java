@@ -18,7 +18,7 @@ public class StudentUtils {
 
     public boolean isPeselValid(Student student) {
         String sixLettersFromDOB = getSixPeselLettersFromDOB(student);
-        String sixLettersFromPESEL = student.getPesel().substring(0, 5);
+        String sixLettersFromPESEL = student.getPesel().substring(0, 6);
         return sixLettersFromDOB.equals(sixLettersFromPESEL);
     }
 

@@ -6,5 +6,23 @@
 <body>
     <div th:replace="fragments/nav :: navbar"></div>
     <p>hello</p>
+    <td><a th:href="@{/addStudent}" class="btn btn-primary">Add Student</a> </td>
+
+
+    <table border="2" class="table table-bordered" style="width: 60%">
+
+        <div th:replace="fragments/thead :: tabhead"></div>
+
+        <tbody>
+        <tr th:each="students : ${studentsList}">
+            <td th:text="${students.firstName}"></td>
+            <td th:text="${students.middleName}"></td>
+            <td th:text="${students.lastName}"></td>
+            <td th:text="${students.dob}"></td>
+            <td th:text="${students.pesel}"></td>
+        </tr>
+        </tbody>
+
+    </table>
 </body>
 </html>

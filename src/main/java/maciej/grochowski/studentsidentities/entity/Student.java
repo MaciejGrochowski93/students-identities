@@ -3,11 +3,15 @@ package maciej.grochowski.studentsidentities.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import maciej.grochowski.studentsidentities.address.Address;
+import maciej.grochowski.studentsidentities.address.AddressType;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,9 +19,18 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Student {
 
+    public Student(String firstName, String middleName, String lastName, String pesel, LocalDate dob, List<Address> addressList) {
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.pesel = pesel;
+        this.dob = dob;
+        this.addressList = addressList;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "student_id")
     private Integer id;
 
     @NotNull(message = "You have to provide your first name.")
@@ -35,11 +48,42 @@ public class Student {
     private String lastName;
 
     @NotNull(message = "You have to provide your pesel.")
-    @Length(min = 11, max = 11)
+    @Length(min = 11, max = 11, message = "Your pesel must consist of 11 letters.")
     @Column(name = "pesel")
     private String pesel;
 
     @NotNull(message = "You have to provide your date of birth.")
     @Column(name = "date_of_birth")
     private LocalDate dob;
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addressList;
+
+    public List<Address> getAddressList() {
+        if (addressList == null) {
+            addressList = new ArrayList<>();
+            Address address = new Address(
+                    "street1", "112", "randomCity", "20-050", AddressType.PERMANENT
+            );
+            Address address2 = new Address(
+                    "street2", "232", "randomCity#2", "20-050", AddressType.RESIDENTIAL
+            );
+            addressList.add(address);
+            addressList.add(address2);
+        }
+        return addressList;
+    }
+
+    public void setAddressList(List<Address> addressList) {
+        this.addressList = addressList;
+    }
+
+    public Integer getId() {
+        return 123213;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }
+

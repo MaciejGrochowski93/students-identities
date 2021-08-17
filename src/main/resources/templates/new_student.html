@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <div th:replace="fragments/head :: headPart"></div>
+</head>
+<body>
+    <div th:replace="fragments/nav :: navbar"></div>
+    <div class="container">
+        <br>
+        <h2>Register Student</h2>
+        <form th:action="@{/addStudent}" th:object="${studentForm}" method="POST">
+
+            <input type="text" th:field="*{firstName}" placeholder="Your first name" class="form-control mb-4 col-4"/>
+            <div th:fragment="validation-error">
+                <div  th:if="${#fields.hasErrors('firstName')}" class="alert alert-warning" th:errors="*{firstName}"></div>
+            </div>
+
+            <input type="text" th:field="*{middleName}" placeholder="Your middle name" class="form-control mb-4 col-4"/>
+
+            <input type="text" th:field="*{lastName}" placeholder="Your last name" class="form-control mb-4 col-4" step="0.01"/>
+            <div th:fragment="validation-error">
+                <div  th:if="${#fields.hasErrors('lastName')}" class="alert alert-warning" th:errors="*{lastName}"></div>
+            </div>
+
+            <input type="text" th:field="*{pesel}" placeholder="Your pesel" class="form-control mb-4 col-4"/>
+            <div th:fragment="validation-error">
+                <div  th:if="${#fields.hasErrors('pesel')}" class="alert alert-warning" th:errors="*{pesel}"></div>
+            </div>
+
+            <input type="date" th:field="*{dob}" placeholder="Your date of birth" class="form-control mb-4 col-4"/>
+            <div th:fragment="validation-error">
+                <div  th:if="${#fields.hasErrors('dob')}" class="alert alert-warning" th:errors="*{dob}"></div>
+            </div>
+
+<!--            <tr th:each="currentClient, stat : ${clientList}">-->
+<!--                <td><input type="checkbox" th:checked="${currentClient.selected}" /></td>-->
+<!--                <td th:text="${currentClient.getClientID()}" ></td>-->
+<!--                <td th:text="${currentClient.getIpAddress()}"></td>-->
+<!--                <td th:text="${currentClient.getDescription()}" ></td>-->
+<!--            </tr>-->
+
+<!--            <br>-->
+<!--            <h2>Permanent Address</h2>-->
+<!--            <input type="text" th:field="*{address.addressList.city}" placeholder="City:" class="form-control mb-4 col-4"/>-->
+<!--            <input type="text" th:field="*{addressList.street}" placeholder="Street:" class="form-control mb-4 col-4"/>-->
+<!--            <input type="text" th:field="*{address.houseNr}" placeholder="House number:" class="form-control mb-4 col-4"/>-->
+<!--            <input type="text" th:field="*{address.postalCode}" placeholder="Postal code:" class="form-control mb-4 col-4"/>-->
+<!--            <p>Permanent address is mandatory.</p>-->
+
+<!--            <br>-->
+<!--            <h2>Residential Address</h2>-->
+<!--            <input type="text" th:field="*{address.city}" placeholder="City:" class="form-control mb-4 col-4"/>-->
+<!--            <input type="text" th:field="*{address.street}" placeholder="Street:" class="form-control mb-4 col-4"/>-->
+<!--            <input type="text" th:field="*{address.houseNr}" placeholder="House number:" class="form-control mb-4 col-4"/>-->
+<!--            <input type="text" th:field="*{address.postalCode}" placeholder="Postal code:" class="form-control mb-4 col-4"/>-->
+<!--            <p>Residential address is not mandatory - please, only provide if it differs from your residential address.</p>-->
+
+<!--            <br>-->
+<!--            <h2>Correspondence Address</h2>-->
+<!--            <input type="text" th:field="*{address.city}" placeholder="City:" class="form-control mb-4 col-4"/>-->
+<!--            <input type="text" th:field="*{address.street}" placeholder="Street:" class="form-control mb-4 col-4"/>-->
+<!--            <input type="text" th:field="*{address.houseNr}" placeholder="House number:" class="form-control mb-4 col-4"/>-->
+<!--            <input type="text" th:field="*{address.postalCode}" placeholder="Postal code:" class="form-control mb-4 col-4"/>-->
+<!--            <p>Correspondence address is not mandatory - please, only provide if it differs from your residential address.</p>-->
+
+            <button type="submit" class="btn btn-info col-1">Register</button>
+        </form>
+
+    </div>
+</body>
+</html>
+
+<!--            <div th:each="client : ${clients}">-->
+
+<!--                <div th:each="purchase : ${client.purchases}">-->
+<!--                <span id="2"-->
+<!--                      th:text="${#aggregates.sum(purchase.products.![price])}"> </span>-->
+<!--                    <div th:each="product : ${purchase.products}">-->
+<!--                        <span th:text="${product.price}"></span>-->
+
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
