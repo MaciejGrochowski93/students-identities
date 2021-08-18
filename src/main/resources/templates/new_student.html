@@ -10,59 +10,63 @@
         <h2>Register Student</h2>
         <form th:action="@{/addStudent}" th:object="${studentForm}" method="POST">
 
-            <input type="text" th:field="*{firstName}" placeholder="Your first name" class="form-control mb-4 col-4"/>
-            <div th:fragment="validation-error">
-                <div  th:if="${#fields.hasErrors('firstName')}" class="alert alert-warning" th:errors="*{firstName}"></div>
+                <input type="text" th:field="*{firstName}" placeholder="Your first name" class="form-control mb-4 col-4"/>
+                <div th:fragment="validation-error">
+                    <div  th:if="${#fields.hasErrors('firstName')}" class="alert alert-warning" th:errors="*{firstName}"></div>
+                </div>
+
+                <input type="text" th:field="*{middleName}" placeholder="Your middle name" class="form-control mb-4 col-4"/>
+
+                <input type="text" th:field="*{lastName}" placeholder="Your last name" class="form-control mb-4 col-4" step="0.01"/>
+                <div th:fragment="validation-error">
+                    <div  th:if="${#fields.hasErrors('lastName')}" class="alert alert-warning" th:errors="*{lastName}"></div>
+                </div>
+
+                <input type="text" th:field="*{pesel}" placeholder="Your pesel" class="form-control mb-4 col-4"/>
+                <div th:fragment="validation-error">
+                    <div  th:if="${#fields.hasErrors('pesel')}" class="alert alert-warning" th:errors="*{pesel}"></div>
+                </div>
+
+                <input type="date" th:field="*{dob}" placeholder="Your date of birth" class="form-control mb-4 col-4"/>
+                <div th:fragment="validation-error">
+                    <div  th:if="${#fields.hasErrors('dob')}" class="alert alert-warning" th:errors="*{dob}"></div>
+                </div>
+
+            <div th:object="${addressForm}">
+                <table>
+                    <thead>
+                    <tr>
+                        <th> City</th>
+                        <th> Street</th>
+                        <th> House number</th>
+                        <th> Postal Code</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="address, itemStat : *{addressList}">
+                        <td><input th:field="*{addressList[__${itemStat.index}__].city}" /></td>
+                        <td><input th:field="*{addressList[__${itemStat.index}__].street}" /></td>
+                        <td><input th:field="*{addressList[__${itemStat.index}__].houseNr}" /></td>
+                        <td><input th:field="*{addressList[__${itemStat.index}__].postalCode}" /></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
 
-            <input type="text" th:field="*{middleName}" placeholder="Your middle name" class="form-control mb-4 col-4"/>
+<!--                <div th:object="${addressForm}">-->
+<!--                <p>Residential Address</p>-->
+<!--                    <div th:replace="fragments/addAddress :: addAddressPart"></div>-->
+<!--                </div>-->
 
-            <input type="text" th:field="*{lastName}" placeholder="Your last name" class="form-control mb-4 col-4" step="0.01"/>
-            <div th:fragment="validation-error">
-                <div  th:if="${#fields.hasErrors('lastName')}" class="alert alert-warning" th:errors="*{lastName}"></div>
-            </div>
+<!--                <div th:object="${addressForm2}">-->
+<!--                <p>Permanent Address</p>-->
+<!--                    <div th:replace="fragments/addAddress :: addAddressPart"></div>-->
+<!--                </div>-->
 
-            <input type="text" th:field="*{pesel}" placeholder="Your pesel" class="form-control mb-4 col-4"/>
-            <div th:fragment="validation-error">
-                <div  th:if="${#fields.hasErrors('pesel')}" class="alert alert-warning" th:errors="*{pesel}"></div>
-            </div>
-
-            <input type="date" th:field="*{dob}" placeholder="Your date of birth" class="form-control mb-4 col-4"/>
-            <div th:fragment="validation-error">
-                <div  th:if="${#fields.hasErrors('dob')}" class="alert alert-warning" th:errors="*{dob}"></div>
-            </div>
-
-<!--            <tr th:each="currentClient, stat : ${clientList}">-->
-<!--                <td><input type="checkbox" th:checked="${currentClient.selected}" /></td>-->
-<!--                <td th:text="${currentClient.getClientID()}" ></td>-->
-<!--                <td th:text="${currentClient.getIpAddress()}"></td>-->
-<!--                <td th:text="${currentClient.getDescription()}" ></td>-->
-<!--            </tr>-->
-
-<!--            <br>-->
-<!--            <h2>Permanent Address</h2>-->
-<!--            <input type="text" th:field="*{address.addressList.city}" placeholder="City:" class="form-control mb-4 col-4"/>-->
-<!--            <input type="text" th:field="*{addressList.street}" placeholder="Street:" class="form-control mb-4 col-4"/>-->
-<!--            <input type="text" th:field="*{address.houseNr}" placeholder="House number:" class="form-control mb-4 col-4"/>-->
-<!--            <input type="text" th:field="*{address.postalCode}" placeholder="Postal code:" class="form-control mb-4 col-4"/>-->
-<!--            <p>Permanent address is mandatory.</p>-->
-
-<!--            <br>-->
-<!--            <h2>Residential Address</h2>-->
-<!--            <input type="text" th:field="*{address.city}" placeholder="City:" class="form-control mb-4 col-4"/>-->
-<!--            <input type="text" th:field="*{address.street}" placeholder="Street:" class="form-control mb-4 col-4"/>-->
-<!--            <input type="text" th:field="*{address.houseNr}" placeholder="House number:" class="form-control mb-4 col-4"/>-->
-<!--            <input type="text" th:field="*{address.postalCode}" placeholder="Postal code:" class="form-control mb-4 col-4"/>-->
-<!--            <p>Residential address is not mandatory - please, only provide if it differs from your residential address.</p>-->
-
-<!--            <br>-->
-<!--            <h2>Correspondence Address</h2>-->
-<!--            <input type="text" th:field="*{address.city}" placeholder="City:" class="form-control mb-4 col-4"/>-->
-<!--            <input type="text" th:field="*{address.street}" placeholder="Street:" class="form-control mb-4 col-4"/>-->
-<!--            <input type="text" th:field="*{address.houseNr}" placeholder="House number:" class="form-control mb-4 col-4"/>-->
-<!--            <input type="text" th:field="*{address.postalCode}" placeholder="Postal code:" class="form-control mb-4 col-4"/>-->
-<!--            <p>Correspondence address is not mandatory - please, only provide if it differs from your residential address.</p>-->
-
+<!--                <p>Correspondence Address</p>-->
+<!--                <div th:object="${addressForm3}">-->
+<!--                    <div th:replace="fragments/addAddress :: addAddressPart"></div>-->
+<!--                </div>-->
             <button type="submit" class="btn btn-info col-1">Register</button>
         </form>
 
@@ -70,15 +74,23 @@
 </body>
 </html>
 
-<!--            <div th:each="client : ${clients}">-->
-
-<!--                <div th:each="purchase : ${client.purchases}">-->
-<!--                <span id="2"-->
-<!--                      th:text="${#aggregates.sum(purchase.products.![price])}"> </span>-->
-<!--                    <div th:each="product : ${purchase.products}">-->
-<!--                        <span th:text="${product.price}"></span>-->
-
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-
+<!--            <fieldset>-->
+<!--                <table>-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                        <th>City</th>-->
+<!--                        <th>Street</th>-->
+<!--                        <th>House number</th>-->
+<!--                        <th>Postal code</th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    <tr th:each="address : ${addressForm}">-->
+<!--                        <td th:text="${address.street}"/>-->
+<!--                        <td th:text="${address.city}"/>-->
+<!--                        <td th:text="${address.houseNr}"/>-->
+<!--                        <td th:text="${address.postalCode}"/>-->
+<!--                    </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </fieldset>-->

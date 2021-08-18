@@ -1,0 +1,23 @@
+<div th:fragment="addAddressPart" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <input type="text" th:field="*{city}" placeholder="Your city" class="form-control mb-4 col-4"/>
+    <div th:fragment="validation-error">
+        <div  th:if="${#fields.hasErrors('city')}" class="alert alert-warning" th:errors="*{city}"></div>
+    </div>
+
+    <input type="text" th:field="*{street}" placeholder="Your street" class="form-control mb-4 col-4"/>
+    <div th:fragment="validation-error">
+        <div  th:if="${#fields.hasErrors('street')}" class="alert alert-warning" th:errors="*{street}"></div>
+    </div>
+
+    <input type="text" th:field="*{houseNr}" placeholder="Your house number" class="form-control mb-4 col-4"/>
+    <div th:fragment="validation-error">
+        <div  th:if="${#fields.hasErrors('houseNr')}" class="alert alert-warning" th:errors="*{houseNr}"></div>
+    </div>
+
+    <input type="text" th:field="*{postalCode}" placeholder="Your postal code" class="form-control mb-4 col-4"/>
+    <div th:fragment="validation-error">
+        <div  th:if="${#fields.hasErrors('postalCode')}" class="alert alert-warning" th:errors="*{postalCode}"></div>
+    </div>
+
+</div>

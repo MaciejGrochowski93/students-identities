@@ -21,7 +21,6 @@ public class StudentService {
 
     public void addStudent(Student student) {
         if (utils.isPeselValid(student) && utils.isAdult(student)) {
-            addressService.saveAddressesOfStudent(student);
             studentRepository2.save(student);
         }
     }
@@ -30,36 +29,4 @@ public class StudentService {
         return studentRepository2.findAll();
     }
 }
-
-//    public void setDefaultStudentAddresses(Student student) {
-//        ResidentialAddress resAddress = student.getResidentialAddress();
-//        CorrespondenceAddress corAddress = student.getCorrespondenceAddress();
-//        PermanentAddress permAddress = student.getPermanentAddress();
-//
-//        if (corAddress == null) {
-//            corAddress.setCity(resAddress.getCity());
-//            corAddress.setStreet(resAddress.getStreet());
-//            corAddress.setHouseNr(resAddress.getHouseNr());
-//            corAddress.setPostalCode(resAddress.getPostalCode());
-//        }
-//
-//        if (permAddress == null) {
-//            permAddress.setCity(resAddress.getCity());
-//            permAddress.setStreet(resAddress.getStreet());
-//            permAddress.setHouseNr(resAddress.getHouseNr());
-//            permAddress.setPostalCode(resAddress.getPostalCode());
-//        }
-//    }
-
-//    public void addStudent2() {
-//
-//        ArrayList<Address> list = new ArrayList<>();
-//        list.add(new Address("Lipniak", "24A", "Lublin", "20-050", AddressType.RESIDENTIAL));
-//        Student student = new Student(1, "Maciej", null, "Grochowski", "93021712458", LocalDate.of(1993, 02, 17),
-//                list);
-//        if (utils.isPeselValid(student) && utils.isAdult(student)) {
-//            studentRepository2.save(student);
-//            addressService.saveAddressesOfStudent(student);
-//        }
-//    }
 

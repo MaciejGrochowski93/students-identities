@@ -20,9 +20,6 @@ public class AddressService {
 
     public void saveAddressesOfStudent(Student student) {
         List<Address> addressList = student.getAddressList();
-        for (Address address : addressList) {
-            address.setStudent(student);
-            addressRepository.save(address);
-        }
+        addressList.forEach(address -> address.setStudent(student));
     }
 }

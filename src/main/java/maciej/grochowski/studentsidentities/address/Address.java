@@ -1,8 +1,6 @@
 package maciej.grochowski.studentsidentities.address;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import maciej.grochowski.studentsidentities.entity.Student;
 import org.hibernate.validator.constraints.Length;
 
@@ -10,7 +8,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Address {
@@ -43,7 +42,7 @@ public class Address {
     @Length(min = 6, max = 6, message = "Postal code must consist of 6 letters")
     private String postalCode;
 
-    @NotNull
+//    @NotNull
     @Enumerated(EnumType.STRING)
     private AddressType type;
 

@@ -1,8 +1,6 @@
 package maciej.grochowski.studentsidentities.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import maciej.grochowski.studentsidentities.address.Address;
 import maciej.grochowski.studentsidentities.address.AddressType;
 import org.hibernate.validator.constraints.Length;
@@ -62,14 +60,6 @@ public class Student {
     public List<Address> getAddressList() {
         if (addressList == null) {
             addressList = new ArrayList<>();
-            Address address = new Address(
-                    "street1", "112", "randomCity", "20-050", AddressType.PERMANENT
-            );
-            Address address2 = new Address(
-                    "street2", "232", "randomCity#2", "20-050", AddressType.RESIDENTIAL
-            );
-            addressList.add(address);
-            addressList.add(address2);
         }
         return addressList;
     }
@@ -79,7 +69,7 @@ public class Student {
     }
 
     public Integer getId() {
-        return 123213;
+        return this.id;
     }
 
     public void setId(Integer id) {
