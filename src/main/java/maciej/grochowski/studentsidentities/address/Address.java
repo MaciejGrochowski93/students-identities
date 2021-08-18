@@ -42,7 +42,6 @@ public class Address {
     @Length(min = 6, max = 6, message = "Postal code must consist of 6 letters")
     private String postalCode;
 
-//    @NotNull
     @Enumerated(EnumType.STRING)
     private AddressType type;
 

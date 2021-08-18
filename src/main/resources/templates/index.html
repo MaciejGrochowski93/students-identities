@@ -4,25 +4,25 @@
     <div th:replace="fragments/head :: headPart"></div>
 </head>
 <body>
-    <div th:replace="fragments/nav :: navbar"></div>
-    <p>hello</p>
-    <td><a th:href="@{/addStudent}" class="btn btn-primary">Add Student</a> </td>
+<div th:replace="fragments/nav :: navbar"></div>
+<p>hello</p>
+<td><a th:href="@{/addStudent}" class="btn btn-primary">Add Student</a></td>
 
 
-    <table border="2" class="table table-bordered" style="width: 60%">
+<table border="2" class="table table-bordered" style="width: 60%">
 
-        <div th:replace="fragments/thead :: tabhead"></div>
+    <div th:replace="fragments/thead :: tabhead"></div>
 
-        <tbody>
-        <tr th:each="students : ${studentsList}">
-            <td th:text="${students.firstName}"></td>
-            <td th:text="${students.middleName}"></td>
-            <td th:text="${students.lastName}"></td>
-            <td th:text="${students.dob}"></td>
-            <td th:text="${students.pesel}"></td>
-        </tr>
-        </tbody>
+    <tbody>
+    <tr th:each="students : ${studentsList}">
+        <td th:text="${students.firstName}"></td>
+        <td th:text="${students.middleName}"></td>
+        <td th:text="${students.lastName}"></td>
+        <td th:text="${students.dob}"></td>
+        <td th:text="${students.pesel}"></td>
+    </tr>
+    </tbody>
 
-    </table>
+</table>
 </body>
 </html>

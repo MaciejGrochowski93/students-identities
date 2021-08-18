@@ -5,6 +5,7 @@ import maciej.grochowski.studentsidentities.address.Address;
 import maciej.grochowski.studentsidentities.address.AddressCreationDTO;
 import maciej.grochowski.studentsidentities.address.AddressType;
 import maciej.grochowski.studentsidentities.entity.Student;
+import maciej.grochowski.studentsidentities.repository.StudentRepository;
 import maciej.grochowski.studentsidentities.service.AddressService;
 import maciej.grochowski.studentsidentities.service.StudentService;
 import org.springframework.stereotype.Controller;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -24,6 +24,7 @@ public class StudentController {
 
     private final StudentService studentService;
     private final AddressService addressService;
+    private final StudentRepository studentRepository;
 
     @GetMapping()
     public String index(Model model) {
@@ -31,6 +32,7 @@ public class StudentController {
         model.addAttribute("studentsList", allStudents);
         return "index";
     }
+
 
     @GetMapping("/addStudent")
     public String addStudentForm(Model model) {

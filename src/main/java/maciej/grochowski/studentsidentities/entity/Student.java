@@ -1,9 +1,12 @@
 package maciej.grochowski.studentsidentities.entity;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import maciej.grochowski.studentsidentities.address.Address;
-import maciej.grochowski.studentsidentities.address.AddressType;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -16,6 +19,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Student {
+
+    public Student(String firstName, String lastName, String pesel, LocalDate dob, List<Address> addressList) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.pesel = pesel;
+        this.dob = dob;
+        this.addressList = addressList;
+    }
 
     public Student(String firstName, String middleName, String lastName, String pesel, LocalDate dob, List<Address> addressList) {
         this.firstName = firstName;
@@ -54,6 +65,7 @@ public class Student {
     @Column(name = "date_of_birth")
     private LocalDate dob;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addressList;
 
