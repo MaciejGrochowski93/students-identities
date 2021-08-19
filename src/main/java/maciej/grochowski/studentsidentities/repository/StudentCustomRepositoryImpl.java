@@ -30,32 +30,29 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
     }
 
     @Override
+    public List<Student> findAllWithFilters(StudentSearchCriteria searchCriteria, StudentSortCriteria sortCriteria) {
+        CriteriaQuery<Student> criteriaQuery = criteriaBuilder.createQuery(Student.class);
+        Root<Student> studentRoot = criteriaQuery.from(Student.class);
+
+        return null;
+    }
+
+    @Override
     public List<Student> findStudentsOfAge(int age) {
         criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Student> criteriaQuery = criteriaBuilder.createQuery(Student.class);
         Root<Student> studentRoot = criteriaQuery.from(Student.class);
 
-        LocalDate dateOfBirth = LocalDate.now().minusYears(age); // -28 = 1993
-        int yearOfBirth = dateOfBirth.getYear();
+        LocalDate tmpDate = LocalDate.now().minusYears(age);
+        int yearOfBirth = tmpDate.getYear();
 
-        Predicate getAllStudentsPredicate = criteriaBuilder.like(studentRoot.get("firstName"), "%");
-        criteriaQuery.where(getAllStudentsPredicate);
+        LocalDate searchFromDate = LocalDate.of(yearOfBirth, 01, 01);
+        LocalDate searchToDate = LocalDate.of(yearOfBirth, 12, 31);
+        Predicate dob = criteriaBuilder.between(studentRoot.get("dob"), searchFromDate, searchToDate);
 
+        criteriaQuery.where(dob);
         TypedQuery<Student> typedQuery = entityManager.createQuery(criteriaQuery);
 
-        return getSameYearsList(typedQuery, yearOfBirth);
+        return typedQuery.getResultList();
     }
-
-    public List<Student> getSameYearsList(TypedQuery typedQuery, int yearOfBirth) {
-        List<Student> queryList = typedQuery.getResultList();
-        List<Student> resultList = new ArrayList<>();
-
-        for (Student result : queryList) {
-            if (result.getDob().getYear() == yearOfBirth) {
-                resultList.add(result);
-            }
-        }
-        return resultList;
-    }
-
 }

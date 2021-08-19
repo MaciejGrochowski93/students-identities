@@ -10,6 +10,7 @@ import java.util.List;
 @Component
 public interface StudentCustomRepository {
 
+    List<Student> findAllWithFilters(StudentSearchCriteria searchCriteria, StudentSortCriteria sortCriteria);
 
     List<Student> findStudentsOfAge(int age);
 }
