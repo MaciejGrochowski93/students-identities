@@ -15,36 +15,56 @@ public class AddressCustomRepositoryImpl implements AddressCustomRepository {
 
     @Autowired
     private EntityManager entityManager;
+    private CriteriaBuilder criteriaBuilder;
+
+    public AddressCustomRepositoryImpl() {
+    }
+
+    public AddressCustomRepositoryImpl(EntityManager entityManager, CriteriaBuilder criteriaBuilder) {
+        this.entityManager = entityManager;
+        this.criteriaBuilder = entityManager.getCriteriaBuilder();
+    }
+
 
     @Override
     public List<Address> findAddressesByStudentId(int studentId) {
+        criteriaBuilder = entityManager.getCriteriaBuilder();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery <Address> cq = cb.createQuery(Address.class);
+        CriteriaQuery<Address> criteriaQuery = criteriaBuilder.createQuery(Address.class);
+        Root<Address> address = criteriaQuery.from(Address.class);
 
-        Root<Address> address = cq.from(Address.class);
+        Predicate idPredicate = criteriaBuilder.equal(address.get("student"), studentId);
+        criteriaQuery.where(idPredicate);
 
-        Predicate studentIdPredicate = cb.equal(address.get("student"), studentId);
+        TypedQuery<Address> typedQuery = entityManager.createQuery(criteriaQuery);
+        return typedQuery.getResultList();
+    }
 
-        cq.where(studentIdPredicate);
+    @Override
+    public Long getStudentsCountByCity(String city) {
+        criteriaBuilder = entityManager.getCriteriaBuilder();
 
-        TypedQuery<Address> query = entityManager.createQuery(cq);
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<Address> addressRoot = criteriaQuery.from(Address.class);
 
-        return query.getResultList();
+        Predicate cityPredicate = criteriaBuilder.like(addressRoot.get("city"), city);
+        criteriaQuery.select(criteriaBuilder.count(addressRoot)).where(cityPredicate);
+
+        TypedQuery<Long> typedQuery = entityManager.createQuery(criteriaQuery);
+        return typedQuery.getSingleResult();
     }
 
     @Override
     public List<Address> getAddressByCity(String city) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Address> cq = cb.createQuery(Address.class);
+        criteriaBuilder = entityManager.getCriteriaBuilder();
 
-        Root<Address> address = cq.from(Address.class);
+        CriteriaQuery<Address> criteriaQuery = criteriaBuilder.createQuery(Address.class);
+        Root<Address> address = criteriaQuery.from(Address.class);
 
-        Predicate studentsByCity = cb.like(address.get("city"), "%" + city + "%");
-        cq.where(studentsByCity);
+        Predicate cityPredicate = criteriaBuilder.like(address.get("city"), city);
+        criteriaQuery.where(cityPredicate);
 
-        TypedQuery<Address> query = entityManager.createQuery(cq);
-        return query.getResultList();
+        TypedQuery<Address> typedQuery = entityManager.createQuery(criteriaQuery);
+        return typedQuery.getResultList();
     }
-
 }

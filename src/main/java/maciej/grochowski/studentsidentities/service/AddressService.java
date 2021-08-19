@@ -22,4 +22,8 @@ public class AddressService {
         List<Address> addressList = student.getAddressList();
         addressList.forEach(address -> address.setStudent(student));
     }
+
+    public Long getStudentsCountByCity(String city) {
+        return addressRepository.getStudentsCountByCity(city);
+    }
 }

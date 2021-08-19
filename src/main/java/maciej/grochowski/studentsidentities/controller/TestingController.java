@@ -4,6 +4,8 @@ import maciej.grochowski.studentsidentities.address.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
 import maciej.grochowski.studentsidentities.repository.AddressRepository;
 import maciej.grochowski.studentsidentities.repository.StudentRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +15,9 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-public class AddressController {
+public class TestingController {
+
+    public static final Logger STDOUT = LoggerFactory.getLogger(TestingController.class);
 
     @Autowired
     public AddressRepository addressRepository;
@@ -33,9 +37,23 @@ public class AddressController {
         return addressRepository.findById(addressId);
     }
 
-    @GetMapping("/addresses/{city}")
+    @GetMapping("/students/age/{age}")
+    public List<Student> getStudentsOfAge(@PathVariable int age) {
+        return studentRepository.findStudentsOfAge(age);
+    }
+
+    @GetMapping("/addresses/students/{city}")
     public List<Address> getAddressByCity(@PathVariable String city) {
-        return addressRepository.getAddressByCity(city);
+        List<Address> addressByCity = addressRepository.getAddressByCity(city);
+        STDOUT.info(String.valueOf(addressByCity));
+        return addressByCity;
+    }
+
+    @GetMapping("/addresses/cities/{city}")
+    public Long getStudentsCountByCity(@PathVariable String city) {
+        Long studentsCountByCity = addressRepository.getStudentsCountByCity(city);
+        STDOUT.info(String.valueOf(studentsCountByCity));
+        return studentsCountByCity;
     }
 
     @GetMapping("/students/{studentId}")

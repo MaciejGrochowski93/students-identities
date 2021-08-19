@@ -13,7 +13,7 @@ public class StudentUtils {
 
         Period time = Period.between(studentBirthday, today);
         int years = time.getYears();
-        return years > 18;
+        return years >= 18;
     }
 
     public boolean isPeselValid(Student student) {
