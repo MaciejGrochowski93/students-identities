@@ -22,8 +22,20 @@ public class StudentService {
         }
     }
 
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public void sortByFirstName() {
+        studentRepository.sortByFirstName();
+    }
+
+    public List<Student> getAllStudentsCriteria() {
+        return studentRepository.getAllStudentsCriteria();
+    }
+
+    public void sortByLastName() {
+        studentRepository.sortByLastName();
+    }
+
+    public void sortByAge() {
+        studentRepository.sortByAge();
     }
 }
 

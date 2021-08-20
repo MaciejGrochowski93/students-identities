@@ -28,11 +28,28 @@ public class StudentController {
 
     @GetMapping()
     public String index(Model model) {
-        List<Student> allStudents = studentService.getAllStudents();
+        List<Student> allStudents = studentService.getAllStudentsCriteria();
         model.addAttribute("studentsList", allStudents);
         return "index";
     }
 
+    @GetMapping("/sortByFirstName")
+    public String sortByFirstName() {
+        studentRepository.sortByFirstName();
+        return "redirect:/";
+    }
+
+    @GetMapping("/sortByLastName")
+    public String sortByLastName() {
+        studentService.sortByLastName();
+        return "redirect:/";
+    }
+
+    @GetMapping("/sortByAge")
+    public String sortByAge() {
+        studentService.sortByAge();
+        return "redirect:/";
+    }
 
     @GetMapping("/addStudent")
     public String addStudentForm(Model model) {
@@ -47,6 +64,7 @@ public class StudentController {
         model.addAttribute("studentForm", new Student());
         return "new_student";
     }
+
 
     @PostMapping("/addStudent")
     public String addStudent(@ModelAttribute("studentForm") @Valid Student student,

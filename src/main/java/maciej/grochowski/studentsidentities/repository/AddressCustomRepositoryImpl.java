@@ -1,5 +1,6 @@
 package maciej.grochowski.studentsidentities.repository;
 
+import lombok.NoArgsConstructor;
 import maciej.grochowski.studentsidentities.address.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,20 +12,18 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+@NoArgsConstructor
 public class AddressCustomRepositoryImpl implements AddressCustomRepository {
 
     @Autowired
     private EntityManager entityManager;
     private CriteriaBuilder criteriaBuilder;
 
-    public AddressCustomRepositoryImpl() {
-    }
 
     public AddressCustomRepositoryImpl(EntityManager entityManager, CriteriaBuilder criteriaBuilder) {
         this.entityManager = entityManager;
         this.criteriaBuilder = entityManager.getCriteriaBuilder();
     }
-
 
     @Override
     public List<Address> findAddressesByStudentId(int studentId) {

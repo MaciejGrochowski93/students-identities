@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class TestingController {
@@ -21,21 +20,8 @@ public class TestingController {
 
     @Autowired
     public AddressRepository addressRepository;
-
     @Autowired
     public StudentRepository studentRepository;
-
-    @GetMapping("/addresses")
-    public List<Address> findAllAddresses() {
-
-        return addressRepository.findAll();
-    }
-
-    @GetMapping("/addresses/{addressId}")
-    public Optional<Address> findAddressById(@PathVariable int addressId) {
-
-        return addressRepository.findById(addressId);
-    }
 
     @GetMapping("/students/age/{age}")
     public List<Student> getStudentsOfAge(@PathVariable int age) {
@@ -49,6 +35,11 @@ public class TestingController {
         return addressByCity;
     }
 
+    @GetMapping("/sortedByName")
+    public void getSortedAddresses() {
+        studentRepository.sortByFirstName();
+    }
+
     @GetMapping("/addresses/cities/{city}")
     public Long getStudentsCountByCity(@PathVariable String city) {
         Long studentsCountByCity = addressRepository.getStudentsCountByCity(city);
@@ -56,14 +47,13 @@ public class TestingController {
         return studentsCountByCity;
     }
 
-    @GetMapping("/students/{studentId}")
-    public Optional<Student> findStudentById(@PathVariable int studentId) {
-        return studentRepository.findById(studentId);
-    }
-
     @GetMapping("/students/{id}/addresses")
     public List<Address> findAddressesByStudentId(@PathVariable int id) {
-
         return addressRepository.findAddressesByStudentId(id);
     }
 }
+
+//    @GetMapping("/responseEntity")
+//    public ResponseEntity<Page<Student>> getAllStudents(StudentPage studentPage) {
+//        return new ResponseEntity<>(studentService.getStudents(studentPage), HttpStatus.OK);
+//    }
