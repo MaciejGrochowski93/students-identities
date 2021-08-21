@@ -11,5 +11,5 @@ public interface AddressCustomRepository {
 
     List<Address> getAddressByCity(String city);
 
-    Long getStudentsCountByCity(String city);
+    Long countStudentsFromCity(String city);
 }

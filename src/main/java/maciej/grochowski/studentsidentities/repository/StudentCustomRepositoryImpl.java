@@ -1,6 +1,7 @@
 package maciej.grochowski.studentsidentities.repository;
 
 import lombok.NoArgsConstructor;
+import maciej.grochowski.studentsidentities.address.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -20,7 +21,7 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
     @Autowired
     private EntityManager entityManager;
     private Sort.Direction sortDirection = Sort.Direction.ASC;
-    private String searchByWord;
+    private String criteriaWord;
     private int number = 1;
 
     @Override
@@ -32,24 +33,24 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
         Predicate predicate = studentRoot.isNotNull();
         criteriaQuery.where(predicate);
 
-        setSearchByWord();
+        setCriteriaWord();
         if (sortDirection.isAscending()) {
-            criteriaQuery.orderBy(criteriaBuilder.asc(studentRoot.get(searchByWord)));
+            criteriaQuery.orderBy(criteriaBuilder.asc(studentRoot.get(criteriaWord)));
         } else {
-            criteriaQuery.orderBy(criteriaBuilder.desc(studentRoot.get(searchByWord)));
+            criteriaQuery.orderBy(criteriaBuilder.desc(studentRoot.get(criteriaWord)));
         }
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
-    private void setSearchByWord() {
+    private void setCriteriaWord() {
         switch (number) {
             case 2:
-                searchByWord = "lastName";
+                criteriaWord = "lastName";
                 break;
             case 3:
-                searchByWord = "dob";
+                criteriaWord = "dob";
                 break;
-            default: searchByWord = "firstName";
+            default: criteriaWord = "firstName";
         }
     }
 
@@ -84,9 +85,9 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
     }
 
     @Override
-    public List<Student> findStudentsOfAge(int age) {
+    public Long countStudentsOfAge(int age) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Student> criteriaQuery = criteriaBuilder.createQuery(Student.class);
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
         Root<Student> studentRoot = criteriaQuery.from(Student.class);
 
         LocalDate tmpDate = LocalDate.now().minusYears(age);
@@ -94,11 +95,11 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
 
         LocalDate searchFromDate = LocalDate.of(yearOfBirth, 1, 1);
         LocalDate searchToDate = LocalDate.of(yearOfBirth, 12, 31);
-        Predicate dob = criteriaBuilder.between(studentRoot.get("dob"), searchFromDate, searchToDate);
+        Predicate dobPredicate = criteriaBuilder.between(studentRoot.get("dob"), searchFromDate, searchToDate);
 
-        criteriaQuery.where(dob);
-        TypedQuery<Student> typedQuery = entityManager.createQuery(criteriaQuery);
+        criteriaQuery.select(criteriaBuilder.count(studentRoot)).where(dobPredicate);
+        TypedQuery<Long> typedQuery = entityManager.createQuery(criteriaQuery);
 
-        return typedQuery.getResultList();
+        return typedQuery.getSingleResult();
     }
 }

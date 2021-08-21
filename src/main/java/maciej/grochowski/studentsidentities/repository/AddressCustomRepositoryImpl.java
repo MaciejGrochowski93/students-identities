@@ -40,7 +40,7 @@ public class AddressCustomRepositoryImpl implements AddressCustomRepository {
     }
 
     @Override
-    public Long getStudentsCountByCity(String city) {
+    public Long countStudentsFromCity(String city) {
         criteriaBuilder = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);

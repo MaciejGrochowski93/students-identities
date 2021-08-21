@@ -16,6 +16,5 @@ public interface StudentCustomRepository {
 
     void sortByAge();
 
-    List<Student> findStudentsOfAge(int age);
-
+    Long countStudentsOfAge(int age);
 }
