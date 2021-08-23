@@ -5,11 +5,12 @@
 </head>
 <body>
 <div th:replace="fragments/nav :: navbar"></div>
-<p>hello</p>
-<td><a th:href="@{/addStudent}" class="btn btn-primary">Add Student</a></td>
+<br><br><br>
 
+<div class="container">
+    <td><a th:href="@{/addStudent}" class="btn btn-primary">Add Student</a></td>
 
-<table border="2" class="table table-bordered" style="width: 60%">
+    <table border="2" class="table table-bordered" style="width: 60%">
 
     <div th:replace="fragments/thead :: tabhead"></div>
 
@@ -22,14 +23,24 @@
         <td th:text="${students.pesel}"></td>
     </tr>
     </tbody>
-
 </table>
 
-<span>
-    <a th:href="@{/sortByFirstName}" class="btn btn-primary"> Sort by first name</a>
-    <a th:href="@{/sortByLastName}" class="btn btn-primary"> Sort by last name</a>
-    <a th:href="@{/sortByAge}" class="btn btn-primary"> Sort by age</a>
-</span>
+    <br><br>
 
+    <form th:action="@{students/ageCount}" class="d-flex">
+        <input name="studentsOfAge" class="form-control mb-4 col-4" type="number"
+               placeholder="Find amount of students of age:" min="18" max="100" required/>
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <br>
+    <form th:action="@{students/cityCount}" class="d-flex" id="cityCount">
+        <input name="studentsFromCity" class="form-control mb-4 col-4" type="text"
+               placeholder="Find amount of students from City:" min="1" max="50" required/>
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+    </form>
+
+</div>
+<script type="text/javascript" src="/js/scriptCountStudentsByAge.js"></script>
+<script type="text/javascript" src="/js/scriptCountStudentsByCity.js"></script>
 </body>
 </html>

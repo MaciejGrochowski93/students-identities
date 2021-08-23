@@ -1,13 +1,16 @@
 package maciej.grochowski.studentsidentities.controller;
 
 import lombok.AllArgsConstructor;
-import maciej.grochowski.studentsidentities.address.Address;
-import maciej.grochowski.studentsidentities.address.AddressCreationDTO;
-import maciej.grochowski.studentsidentities.address.AddressType;
+import maciej.grochowski.studentsidentities.DTO.*;
+import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
-import maciej.grochowski.studentsidentities.repository.StudentRepository;
+import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException;
+import maciej.grochowski.studentsidentities.exception.TooYoungException;
 import maciej.grochowski.studentsidentities.service.AddressService;
 import maciej.grochowski.studentsidentities.service.StudentService;
+import maciej.grochowski.studentsidentities.utils.StudentUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +27,8 @@ public class StudentController {
 
     private final StudentService studentService;
     private final AddressService addressService;
-    private final StudentRepository studentRepository;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
 
     @GetMapping()
     public String index(Model model) {
@@ -33,55 +37,39 @@ public class StudentController {
         return "index";
     }
 
-    @GetMapping("/sortByFirstName")
-    public String sortByFirstName() {
-        studentRepository.sortByFirstName();
-        return "redirect:/";
-    }
-
-    @GetMapping("/sortByLastName")
-    public String sortByLastName() {
-        studentService.sortByLastName();
-        return "redirect:/";
-    }
-
-    @GetMapping("/sortByAge")
-    public String sortByAge() {
-        studentService.sortByAge();
-        return "redirect:/";
-    }
-
     @GetMapping("/addStudent")
-    public String addStudentForm(Model model) {
-        AddressCreationDTO addressForm = new AddressCreationDTO();
-        List<Address> addressList = addressForm.getAddressList();
-        for (int i = 0; i < 3; i++) {
-            addressList.add(new Address());
-        }
-        addressForm.setAddressList(addressList);
+    public String addStudentForm(@Valid Model model) {
+        AddressListTransfer addressListTransfer = new AddressListTransfer();
+        List<AddressCreationDTO> addressDTOList = studentService.create3xAddressDTO();
+        addressListTransfer.setAddressDTOList(addressDTOList);
 
-        model.addAttribute("addressForm", addressForm);
-        model.addAttribute("studentForm", new Student());
+        model.addAttribute("studentDTOForm", new StudentCreationDTO());
+        model.addAttribute("addressListForm", addressListTransfer);
         return "new_student";
     }
 
-
     @PostMapping("/addStudent")
-    public String addStudent(@ModelAttribute("studentForm") @Valid Student student,
-                             @ModelAttribute("addressForm") AddressCreationDTO form,
-                             BindingResult result) {
-        if (result.hasErrors()) {
+    public String addStudent(@ModelAttribute("studentDTOForm") @Valid StudentCreationDTO studentDTOForm,
+                             BindingResult studentResult,
+                             @ModelAttribute("addressListForm") @Valid AddressListTransfer addressTransfer,
+                             BindingResult addressResult
+                             ) {
+        if (studentResult.hasErrors() || addressResult.hasErrors()) {
             return "new_student";
         }
+        List<AddressCreationDTO> addressDTOList = addressTransfer.getAddressDTOList();
+        List<Address> addressList = addressService.createAddressListFromDTO(addressDTOList);
+        Student createdStudent = studentService.createStudentFromDTO(studentDTOForm, addressList);
 
-        List<Address> addressList = form.getAddressList();
-        addressList.get(0).setType(AddressType.PERMANENT);
-        addressList.get(1).setType(AddressType.RESIDENTIAL);
-        addressList.get(2).setType(AddressType.CORRESPONDENCE);
+        try {
+            addressService.saveAddressesOfStudent(createdStudent);
+            studentService.addStudent(createdStudent);
+        } catch (PeselDateNotMatchException peselException) {
+            LOGGER.error(peselException.getMessage());
+        } catch (TooYoungException ageException) {
+            LOGGER.error(ageException.getMessage());
+        }
 
-        student.setAddressList(addressList);
-        addressService.saveAddressesOfStudent(student);
-        studentService.addStudent(student);
         return "redirect:/";
     }
 }

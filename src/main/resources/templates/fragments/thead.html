@@ -1,10 +1,10 @@
 <div th:fragment="tabhead" xmlns:th="http://www.w3.org/1999/xhtml">
     <thead>
         <tr>
-            <th>First name</th>
-            <th>Middle name</th>
-            <th>Last name</th>
-            <th>Date of birth</th>
+            <th><a th:href="@{/sortByFirstName}">First name</a></th>
+            <th><a th:href="@{/sortByMiddleName}">Middle name</a></th>
+            <th><a th:href="@{/sortByLastName}">Last name</a></th>
+            <th><a th:href="@{/sortByAge}">Date of birth</a></th>
             <th>Pesel</th>
         </tr>
     </thead>
