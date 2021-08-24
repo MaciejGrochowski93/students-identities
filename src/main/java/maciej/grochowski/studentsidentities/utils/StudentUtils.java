@@ -25,9 +25,8 @@ public class StudentUtils {
     }
 
     public String getSixPeselLettersFromDOB(Student student) {
-        LocalDate studentDob = student.getDob();;
+        LocalDate studentDob = student.getDob();
         String dateString = studentDob.toString();
-        // 2021-08-12
 
         String peselSixLetters = "";
         for (int i = 2; i < 10; i++) {

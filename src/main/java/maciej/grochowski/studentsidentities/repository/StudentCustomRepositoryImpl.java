@@ -1,7 +1,6 @@
 package maciej.grochowski.studentsidentities.repository;
 
 import lombok.NoArgsConstructor;
-import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Address_;
 import maciej.grochowski.studentsidentities.entity.Student;
 import maciej.grochowski.studentsidentities.entity.Student_;

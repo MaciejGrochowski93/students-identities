@@ -1,7 +1,6 @@
 package maciej.grochowski.studentsidentities.service;
 
 import maciej.grochowski.studentsidentities.DTO.AddressCreationDTO;
-import maciej.grochowski.studentsidentities.DTO.AddressType;
 import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
 import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Student;

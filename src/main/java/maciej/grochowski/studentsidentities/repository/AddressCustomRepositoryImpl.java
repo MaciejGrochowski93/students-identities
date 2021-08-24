@@ -52,7 +52,8 @@ public class AddressCustomRepositoryImpl implements AddressCustomRepository {
             case 4:
                 criteriaWord = "postalCode";
                 break;
-            default: criteriaWord = "city";
+            default:
+                criteriaWord = "city";
         }
     }
 
