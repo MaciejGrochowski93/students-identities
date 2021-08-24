@@ -5,42 +5,50 @@
 </head>
 <body>
 <div th:replace="fragments/nav :: navbar"></div>
-<br><br><br>
-
+<br>
 <div class="container">
+    <h1>It could be a big list of students.</h1>
+    <br><br>
+    <table border="2" class="table table-bordered" style="width: 80%">
+        <thead>
+        <tr>
+            <th><a th:href="@{/sortByFirstName}">First name</a></th>
+            <th><a th:href="@{/sortByMiddleName}">Middle name</a></th>
+            <th><a th:href="@{/sortByLastName}">Last name</a></th>
+            <th><a th:href="@{/sortByAge}">Date of birth</a></th>
+            <th>Pesel</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="students : ${studentsList}">
+            <td th:text="${students.firstName}"></td>
+            <td th:text="${students.middleName}"></td>
+            <td th:text="${students.lastName}"></td>
+            <td th:text="${students.dob}"></td>
+            <td th:text="${students.pesel}"></td>
+            <td><a th:href="@{'/student/' + ${students.id} + '/addresses'}" class="btn btn-success">Addresses</a></td>
+            <!--            <td><a th:href="@{'/deleteStudent/' + ${students.id}}" class="btn btn-danger">Delete student</a></td>-->
+        </tr>
+        </tbody>
+    </table>
+    <br>
     <td><a th:href="@{/addStudent}" class="btn btn-primary">Add Student</a></td>
 
-    <table border="2" class="table table-bordered" style="width: 60%">
-
-    <div th:replace="fragments/thead :: tabhead"></div>
-
-    <tbody>
-    <tr th:each="students : ${studentsList}">
-        <td th:text="${students.firstName}"></td>
-        <td th:text="${students.middleName}"></td>
-        <td th:text="${students.lastName}"></td>
-        <td th:text="${students.dob}"></td>
-        <td th:text="${students.pesel}"></td>
-    </tr>
-    </tbody>
-</table>
-
-    <br><br>
+    <br><br><br>
 
     <form th:action="@{students/ageCount}" class="d-flex">
         <input name="studentsOfAge" class="form-control mb-4 col-4" type="number"
                placeholder="Find amount of students of age:" min="18" max="100" required/>
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        <button class="btn btn-primary" type="submit">Search</button>
     </form>
     <br>
     <form th:action="@{students/cityCount}" class="d-flex" id="cityCount">
         <input name="studentsFromCity" class="form-control mb-4 col-4" type="text"
-               placeholder="Find amount of students from City:" min="1" max="50" required/>
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+               placeholder="Find amount of students from City (not ready yet):" min="1" max="50" required/>
+        <button class="btn btn-primary" type="submit">Search</button>
     </form>
-
 </div>
 <script type="text/javascript" src="/js/scriptCountStudentsByAge.js"></script>
-<script type="text/javascript" src="/js/scriptCountStudentsByCity.js"></script>
 </body>
 </html>

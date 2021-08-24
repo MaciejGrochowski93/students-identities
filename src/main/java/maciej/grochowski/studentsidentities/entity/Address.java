@@ -38,7 +38,7 @@ public class Address {
     @Enumerated(EnumType.STRING)
     private AddressType type;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "student_id")
     public Student student;
 }

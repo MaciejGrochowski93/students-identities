@@ -1,9 +1,9 @@
 package maciej.grochowski.studentsidentities.service;
 
-import maciej.grochowski.studentsidentities.DTO.AddressType;
-import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.DTO.AddressCreationDTO;
+import maciej.grochowski.studentsidentities.DTO.AddressType;
 import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
+import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
 import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException;
 import maciej.grochowski.studentsidentities.exception.TooYoungException;
@@ -22,9 +22,7 @@ public class StudentService {
 
     @Autowired
     private StudentRepository studentRepository;
-
     private final StudentUtils utils = new StudentUtils();
-
     private final static Logger LOGGER = LoggerFactory.getLogger(StudentService.class);
 
     public Student createStudentFromDTO(StudentCreationDTO DTO, List<Address> addressList) {
@@ -42,9 +40,6 @@ public class StudentService {
         for (int i = 0; i < 3; i++) {
             listDTO.add(new AddressCreationDTO());
         }
-        listDTO.get(0).setType(AddressType.PERMANENT);
-        listDTO.get(1).setType(AddressType.RESIDENTIAL);
-        listDTO.get(2).setType(AddressType.CORRESPONDENCE);
         return listDTO;
     }
 
@@ -54,7 +49,8 @@ public class StudentService {
         } else if (!utils.isPeselValid(student)) {
             LOGGER.error("Pesel and date of birth do not match.");
             throw new PeselDateNotMatchException("Pesel and date of birth do not match.");
-        } if (!utils.isAdult(student)) {
+        }
+        if (!utils.isAdult(student)) {
             LOGGER.error("Student is too young.");
             throw new TooYoungException("Student is too young.");
         }
@@ -82,6 +78,14 @@ public class StudentService {
 
     public Long countStudentsOfAge(int age) {
         return studentRepository.countStudentsOfAge(age);
+    }
+
+    public Student getStudentById(int id) {
+        return studentRepository.getStudentByID(id);
+    }
+
+    public void deleteStudentById(int id) {
+        studentRepository.deleteStudentById(id);
     }
 }
 

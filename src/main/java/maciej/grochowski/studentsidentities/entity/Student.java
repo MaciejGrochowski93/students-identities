@@ -54,7 +54,7 @@ public class Student {
     private LocalDate dob;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addressList;
 
     public List<Address> getAddressList() {

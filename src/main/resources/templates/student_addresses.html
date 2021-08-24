@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <div th:replace="fragments/head :: headPart"></div>
+</head>
+<body>
+<div th:replace="fragments/nav :: navbar"></div>
+<div class="container">
+    <br>
+    <h1>List of Addresses - <span th:text="${studentName}"></span></h1>
+    <br><br>
+
+    <table border="2" class="table table-bordered" style="width: 70%">
+        <thead>
+            <th><a th:href="@{/sortByCity}">City </a></th>
+            <th><a th:href="@{/sortByStreet}">Street</a></th>
+            <th><a th:href="@{/sortByHouseNr}">House number</a></th>
+            <th><a th:href="@{/sortByPostalCode}">Postal code</a></th>
+            <th>Type</th>
+        </thead>
+        <tbody>
+            <tr th:each="address : ${addressList}">
+                <td th:text="${address.city}"></td>
+                <td th:text="${address.street}"></td>
+                <td th:text="${address.houseNr}"></td>
+                <td th:text="${address.postalCode}"></td>
+                <td th:text="${address.type}"></td>
+                <td><a th:href="@{'/student/deleteAddress/' + ${address.id}}" class="btn btn-danger">Delete address</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

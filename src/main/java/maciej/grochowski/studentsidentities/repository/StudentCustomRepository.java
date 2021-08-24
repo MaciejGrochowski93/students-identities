@@ -21,11 +21,9 @@ public interface StudentCustomRepository {
 
     Long countStudentsOfAge(int age);
 
-    List<Student> getStudentsFromCity2222(String city);
+    Long getStudentsFromCity3333(String city);
 
-    List<Student> getStudentsFromCity3333(String city);
-
-    Student getAddressById(int id);
+    Student getStudentByID(int id);
 
     @Transactional
     void updateFirstName(int id, String firstNameUpdated);

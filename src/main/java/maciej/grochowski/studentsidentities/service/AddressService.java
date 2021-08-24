@@ -2,6 +2,7 @@ package maciej.grochowski.studentsidentities.service;
 
 import lombok.AllArgsConstructor;
 import maciej.grochowski.studentsidentities.DTO.AddressCreationDTO;
+import maciej.grochowski.studentsidentities.DTO.AddressType;
 import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
 import maciej.grochowski.studentsidentities.repository.AddressRepository;
@@ -33,6 +34,9 @@ public class AddressService {
 
             addressList.add(address);
         }
+        addressList.get(0).setType(AddressType.PERMANENT);
+        addressList.get(1).setType(AddressType.RESIDENTIAL);
+        addressList.get(2).setType(AddressType.CORRESPONDENCE);
         return addressList;
     }
 
@@ -43,5 +47,37 @@ public class AddressService {
 
     public Long countStudentsFromCity(String city) {
         return addressRepository.countStudentsFromCity(city);
+    }
+
+    public List<Address> getAddressByCity(String city) {
+        return addressRepository.getAddressByCity(city);
+    }
+
+    public List<Address> findAddressesByStudentId(int id) {
+        return addressRepository.findAddressesByStudentId(id);
+    }
+
+    public void sortByCity() {
+        addressRepository.sortByCity();
+    }
+
+    public void sortByStreet() {
+        addressRepository.sortByStreet();
+    }
+
+    public void sortByHouseNr() {
+        addressRepository.sortByHouseNr();
+    }
+
+    public void sortByPostalCode() {
+        addressRepository.sortByPostalCode();
+    }
+
+    public void deleteAddressById(int id) {
+        addressRepository.deleteAddressById(id);
+    }
+
+    public void updateCity(int id, String city) {
+        addressRepository.updateCity(id, city);
     }
 }

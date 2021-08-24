@@ -6,13 +6,12 @@ import maciej.grochowski.studentsidentities.entity.Address_;
 import maciej.grochowski.studentsidentities.entity.Student;
 import maciej.grochowski.studentsidentities.entity.Student_;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
-import java.awt.print.Book;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -57,7 +56,8 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
             case 4:
                 criteriaWord = "dob";
                 break;
-            default: criteriaWord = "firstName";
+            default:
+                criteriaWord = "firstName";
         }
     }
 
@@ -121,47 +121,24 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
     }
 
     @Override
-    public List<Student> getStudentsFromCity2222(String city) {
+    public Long getStudentsFromCity3333(String city) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Student> criteriaQuery = criteriaBuilder.createQuery(Student.class); // co chcę uzyskać, określa wynik
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class); // co chcę uzyskać, określa wynik
         Root<Student> root = criteriaQuery.from(Student.class);                             // co przeglądam
+        Join<Object, Object> address = root.join(Student_.ADDRESS_LIST);
 
-        Subquery<Long> subQuery = criteriaQuery.subquery(Long.class);             // co chcę uzyskać
-        Root<Address> subRoot = subQuery.from(Address.class);                           // co przeglądam
-        Join<Address, Student> subStudents = subRoot.join(Address_.student);            // łączę tabele
+        ParameterExpression<String> addressCity = criteriaBuilder.parameter(String.class);
+        criteriaQuery.where(criteriaBuilder.equal(address.get(Address_.CITY), addressCity));
 
-        subQuery.select(criteriaBuilder.count(subRoot.get(Address_.id)));             // policz studentów mających adress
-        subQuery.where(criteriaBuilder.equal(root.get(Student_.id), subStudents.get(Student_.id))); // ze wspólnej listy
-        criteriaQuery.where(criteriaBuilder.greaterThan(subQuery, 4L));         // gdzie POWYŻSZE jest większe niż 4
+        criteriaQuery.select(criteriaBuilder.count(root));
 
-        TypedQuery<Student> typedQuery = entityManager.createQuery(criteriaQuery);
-        return typedQuery.getResultList();
+        TypedQuery<Long> typedQuery = entityManager.createQuery(criteriaQuery);
+        typedQuery.setParameter(addressCity, city);
+        return typedQuery.getSingleResult();
     }
 
     @Override
-    public List<Student> getStudentsFromCity3333(String city) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Student> criteriaQuery = criteriaBuilder.createQuery(Student.class); // co chcę uzyskać, określa wynik
-        Root<Student> root = criteriaQuery.from(Student.class);                             // co przeglądam
-
-        Subquery<Long> subQuery = criteriaQuery.subquery(Long.class);             // co chcę uzyskać
-        Root<Address> subRoot = subQuery.from(Address.class);                           // co przeglądam
-        Join<Address, Student> subStudents = subRoot.join(Address_.student);            // łączę tabele
-
-        subQuery.select(criteriaBuilder.count(subRoot.get(Address_.id)));   // policz studentów mających adress
-        subQuery.where(criteriaBuilder.equal(root.get(Student_.id), subStudents.get(Student_.id))); // ze wspólnej listy
-        subQuery.where(criteriaBuilder.equal(subRoot.get(Address_.CITY), city));
-
-//        Predicate cityPredicate = criteriaBuilder.equal(subRoot.get(Address_.CITY), city); //
-
-        criteriaQuery.where(criteriaBuilder.equal(root.get(Student_.ADDRESS_LIST), subQuery));
-
-        TypedQuery<Student> typedQuery = entityManager.createQuery(criteriaQuery);
-        return typedQuery.getResultList();
-}
-
-    @Override
-    public Student getAddressById(int id) {
+    public Student getStudentByID(int id) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<Student> criteriaQuery = criteriaBuilder.createQuery(Student.class);

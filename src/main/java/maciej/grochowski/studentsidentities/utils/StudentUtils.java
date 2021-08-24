@@ -2,8 +2,10 @@ package maciej.grochowski.studentsidentities.utils;
 
 import maciej.grochowski.studentsidentities.entity.Student;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Optional;
 
 public class StudentUtils {
 
@@ -36,5 +38,9 @@ public class StudentUtils {
             peselSixLetters += currentChar;
         }
         return peselSixLetters;
+    }
+
+    public Optional<String> getPreviousPageByRequest(HttpServletRequest request) {
+        return Optional.ofNullable(request.getHeader("Referer")).map(requestUrl -> "redirect:" + requestUrl);
     }
 }

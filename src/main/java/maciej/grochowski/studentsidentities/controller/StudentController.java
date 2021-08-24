@@ -1,75 +1,47 @@
 package maciej.grochowski.studentsidentities.controller;
 
 import lombok.AllArgsConstructor;
-import maciej.grochowski.studentsidentities.DTO.*;
 import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
-import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException;
-import maciej.grochowski.studentsidentities.exception.TooYoungException;
 import maciej.grochowski.studentsidentities.service.AddressService;
 import maciej.grochowski.studentsidentities.service.StudentService;
 import maciej.grochowski.studentsidentities.utils.StudentUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@AllArgsConstructor
+@RequestMapping("/student")
 public class StudentController {
 
-    private final StudentService studentService;
-    private final AddressService addressService;
+    @Autowired
+    private StudentService studentService;
+    @Autowired
+    private AddressService addressService;
+
+    private StudentUtils studentUtils = new StudentUtils();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
 
-    @GetMapping()
-    public String index(Model model) {
-        List<Student> allStudents = studentService.getAllStudentsCriteria();
-        model.addAttribute("studentsList", allStudents);
-        return "index";
+    @GetMapping("/{id}/addresses")
+    public String findAddressesByStudentId(@PathVariable int id, Model model) {
+        Student studentById = studentService.getStudentById(id);
+        String studentName = studentById.getFirstName() + " " + studentById.getLastName();
+        List<Address> addressList = addressService.findAddressesByStudentId(id);
+        model.addAttribute("studentName", studentName);
+        model.addAttribute("addressList", addressList);
+        return "student_addresses";
     }
 
-    @GetMapping("/addStudent")
-    public String addStudentForm(@Valid Model model) {
-        AddressListTransfer addressListTransfer = new AddressListTransfer();
-        List<AddressCreationDTO> addressDTOList = studentService.create3xAddressDTO();
-        addressListTransfer.setAddressDTOList(addressDTOList);
-
-        model.addAttribute("studentDTOForm", new StudentCreationDTO());
-        model.addAttribute("addressListForm", addressListTransfer);
-        return "new_student";
-    }
-
-    @PostMapping("/addStudent")
-    public String addStudent(@ModelAttribute("studentDTOForm") @Valid StudentCreationDTO studentDTOForm,
-                             BindingResult studentResult,
-                             @ModelAttribute("addressListForm") @Valid AddressListTransfer addressTransfer,
-                             BindingResult addressResult
-                             ) {
-        if (studentResult.hasErrors() || addressResult.hasErrors()) {
-            return "new_student";
-        }
-        List<AddressCreationDTO> addressDTOList = addressTransfer.getAddressDTOList();
-        List<Address> addressList = addressService.createAddressListFromDTO(addressDTOList);
-        Student createdStudent = studentService.createStudentFromDTO(studentDTOForm, addressList);
-
-        try {
-            addressService.saveAddressesOfStudent(createdStudent);
-            studentService.addStudent(createdStudent);
-        } catch (PeselDateNotMatchException peselException) {
-            LOGGER.error(peselException.getMessage());
-        } catch (TooYoungException ageException) {
-            LOGGER.error(ageException.getMessage());
-        }
-
-        return "redirect:/";
+    @GetMapping("/deleteAddress/{id}")
+    public String deleteAddressById(@PathVariable int id, HttpServletRequest request) {
+        addressService.deleteAddressById(id);
+        return studentUtils.getPreviousPageByRequest(request).orElse("redirect:/");
     }
 }
