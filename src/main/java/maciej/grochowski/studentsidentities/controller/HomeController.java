@@ -54,24 +54,25 @@ public class HomeController {
     public String addStudent(@ModelAttribute("studentDTOForm") @Valid StudentCreationDTO studentDTOForm,
                              BindingResult studentResult,
                              @ModelAttribute("addressListForm") @Valid AddressListTransfer addressTransfer,
-                             BindingResult addressResult
-    ) {
+                             BindingResult addressResult, Model model) {
         if (studentResult.hasErrors() || addressResult.hasErrors()) {
             return "new_student";
         }
         List<AddressCreationDTO> addressDTOList = addressTransfer.getAddressDTOList();
         List<Address> addressList = addressService.createAddressListFromDTO(addressDTOList);
-        Student createdStudent = studentService.createStudentFromDTO(studentDTOForm, addressList);
-
         try {
+            Student createdStudent = studentService.createStudentFromDTO(studentDTOForm, addressList);
             addressService.saveAddressesOfStudent(createdStudent);
             studentService.addStudent(createdStudent);
-        } catch (PeselDateNotMatchException peselException) {
-            LOGGER.error(peselException.getMessage());
-        } catch (TooYoungException ageException) {
-            LOGGER.error(ageException.getMessage());
+        } catch (TooYoungException youthExc) {
+            model.addAttribute("youthExc", youthExc.getMessage());
+            LOGGER.error(youthExc.getMessage());
+            return "new_student";
+        } catch (PeselDateNotMatchException peselDateExc) {
+            model.addAttribute("peselDateExc", peselDateExc.getMessage());
+            LOGGER.error(peselDateExc.getMessage());
+            return "new_student";
         }
-
         return "redirect:/";
     }
 

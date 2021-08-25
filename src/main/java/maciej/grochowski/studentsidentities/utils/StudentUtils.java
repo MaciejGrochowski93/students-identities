@@ -1,6 +1,9 @@
 package maciej.grochowski.studentsidentities.utils;
 
+import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
 import maciej.grochowski.studentsidentities.entity.Student;
+import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException;
+import maciej.grochowski.studentsidentities.exception.TooYoungException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -9,23 +12,27 @@ import java.util.Optional;
 
 public class StudentUtils {
 
-    public boolean isAdult(Student student) {
-        LocalDate studentBirthday = student.getDob();
+    public void validateAge(StudentCreationDTO DTO) throws TooYoungException {
+        LocalDate studentBirthday = DTO.getDob();
         LocalDate today = LocalDate.now();
 
         Period time = Period.between(studentBirthday, today);
         int years = time.getYears();
-        return years >= 18;
+        if (years < 18) {
+            throw new TooYoungException("Student must be at least 18 years old.");
+        }
     }
 
-    public boolean isPeselValid(Student student) {
-        String sixLettersFromDOB = getSixPeselLettersFromDOB(student);
-        String sixLettersFromPESEL = student.getPesel().substring(0, 6);
-        return sixLettersFromDOB.equals(sixLettersFromPESEL);
+    public void validatePesel(StudentCreationDTO DTO) throws PeselDateNotMatchException {
+        String sixLettersFromDOB = getSixPeselLettersFromDOB(DTO);
+        String sixLettersFromPESEL = DTO.getPesel().substring(0, 6);
+        if (!sixLettersFromDOB.equals(sixLettersFromPESEL)) {
+            throw new PeselDateNotMatchException("PESEL and date of birth do not match. Please, check them again.");
+        }
     }
 
-    public String getSixPeselLettersFromDOB(Student student) {
-        LocalDate studentDob = student.getDob();
+    public String getSixPeselLettersFromDOB(StudentCreationDTO DTO) {
+        LocalDate studentDob = DTO.getDob();
         String dateString = studentDob.toString();
 
         String peselSixLetters = "";

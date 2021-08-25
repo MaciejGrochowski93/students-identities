@@ -24,7 +24,9 @@ public class StudentService {
     private final StudentUtils utils = new StudentUtils();
     private final static Logger LOGGER = LoggerFactory.getLogger(StudentService.class);
 
-    public Student createStudentFromDTO(StudentCreationDTO DTO, List<Address> addressList) {
+    public Student createStudentFromDTO(StudentCreationDTO DTO, List<Address> addressList) throws PeselDateNotMatchException, TooYoungException {
+        utils.validatePesel(DTO);
+        utils.validateAge(DTO);
         if (DTO.getMiddleName().isEmpty()) {
             return new Student(DTO.getFirstName(), DTO.getLastName(),
                     DTO.getPesel(), DTO.getDob(), addressList);
@@ -43,16 +45,7 @@ public class StudentService {
     }
 
     public void addStudent(Student student) {
-        if (utils.isPeselValid(student) && utils.isAdult(student)) {
-            studentRepository.save(student);
-        } else if (!utils.isPeselValid(student)) {
-            LOGGER.error("Pesel and date of birth do not match.");
-            throw new PeselDateNotMatchException("Pesel and date of birth do not match.");
-        }
-        if (!utils.isAdult(student)) {
-            LOGGER.error("Student is too young.");
-            throw new TooYoungException("Student is too young.");
-        }
+        studentRepository.save(student);
     }
 
     public List<Student> getAllStudentsCriteria() {
