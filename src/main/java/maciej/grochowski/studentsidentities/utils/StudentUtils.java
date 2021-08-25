@@ -24,10 +24,26 @@ public class StudentUtils {
     }
 
     public void validatePesel(StudentCreationDTO DTO) throws PeselDateNotMatchException {
+        if (!isNumeric(DTO.getPesel())) {
+            throw new NumberFormatException();
+        }
         String sixLettersFromDOB = getSixPeselLettersFromDOB(DTO);
         String sixLettersFromPESEL = DTO.getPesel().substring(0, 6);
         if (!sixLettersFromDOB.equals(sixLettersFromPESEL)) {
             throw new PeselDateNotMatchException("PESEL and date of birth do not match. Please, check them again.");
+        }
+
+    }
+
+    public boolean isNumeric(String numberWord) {
+        if (numberWord == null) {
+            return false;
+        }
+        try {
+            Double.parseDouble(numberWord);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 
