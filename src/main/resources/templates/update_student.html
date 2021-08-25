@@ -7,11 +7,11 @@
 <div th:replace="fragments/nav :: navbar"></div>
 <div class="container">
     <br>
-    <h2>Register Student</h2>
+    <h2>Update Student</h2>
     <br>
     <h4>Your identities:</h4>
     <br>
-    <form th:action="@{/addStudent}" th:object="${studentDTOForm}" method="POST">
+    <form th:action="@{'/updateStudent/' + ${student.id}}" th:object="${studentDTOForm}" method="POST">
 
         <label>Your first name:</label>
         <input type="text" th:field="*{firstName}" name="firstName"
@@ -67,6 +67,7 @@
                 <div th:if="${#fields.hasAnyErrors()}" class="alert alert-warning">
                     <span>Please, provide all required Addresses attributes.</span>
                 </div>
+            </tr>
         </div>
         <button type="submit" class="btn btn-info col-1">Register</button>
     </form>

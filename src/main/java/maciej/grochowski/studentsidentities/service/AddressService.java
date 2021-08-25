@@ -2,6 +2,7 @@ package maciej.grochowski.studentsidentities.service;
 
 import lombok.AllArgsConstructor;
 import maciej.grochowski.studentsidentities.DTO.AddressCreationDTO;
+import maciej.grochowski.studentsidentities.DTO.AddressListTransfer;
 import maciej.grochowski.studentsidentities.DTO.AddressType;
 import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
@@ -21,7 +22,8 @@ public class AddressService {
         return addressRepository.findAll();
     }
 
-    public List<Address> createAddressListFromDTO(List<AddressCreationDTO> addressCreationDTOList) {
+    public List<Address> createAddressListFromDTO(AddressListTransfer addressListTransfer) {
+        List<AddressCreationDTO> addressCreationDTOList = addressListTransfer.getAddressDTOList();
         List<Address> addressList = new ArrayList<>();
 
         for (AddressCreationDTO addressDTO : addressCreationDTOList) {

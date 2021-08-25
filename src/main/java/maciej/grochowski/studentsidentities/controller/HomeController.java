@@ -58,8 +58,9 @@ public class HomeController {
         if (studentResult.hasErrors() || addressResult.hasErrors()) {
             return "new_student";
         }
-        List<AddressCreationDTO> addressDTOList = addressTransfer.getAddressDTOList();
-        List<Address> addressList = addressService.createAddressListFromDTO(addressDTOList);
+
+        List<Address> addressList = addressService.createAddressListFromDTO(addressTransfer);
+
         try {
             Student createdStudent = studentService.createStudentFromDTO(studentDTOForm, addressList);
             addressService.saveAddressesOfStudent(createdStudent);
@@ -72,6 +73,43 @@ public class HomeController {
             model.addAttribute("peselDateExc", peselDateExc.getMessage());
             LOGGER.error(peselDateExc.getMessage());
             return "new_student";
+        }
+        return "redirect:/";
+    }
+
+    @GetMapping("/updateStudent/{id}")
+    public String updateStudent(@PathVariable int id, @Valid Model model) {
+//        Student student = studentService.getStudentById(id);
+//        AddressListTransfer addressListTransfer = new AddressListTransfer();
+//        addressListTransfer.setAddressDTOList();
+//        StudentCreationDTO studentDTO = new StudentCreationDTO(
+//            student.getFirstName(), student.getMiddleName(), student.getLastName(), student.getPesel(), student.getDob(), student.getAddressList()
+//        );
+//        model.addAttribute("studentDTOForm", studentById);
+        return "update_student";
+    }
+
+    @PostMapping("/updateStudent/{id}")
+    public String updateStudent(@ModelAttribute("studentDTOForm") @Valid StudentCreationDTO studentDTO,
+                                BindingResult studentResult, @PathVariable int id,
+                                @ModelAttribute("addressListForm") @Valid AddressListTransfer addressListTransfer,
+                                BindingResult addressResult, Model model) {
+        if (studentResult.hasErrors() || addressResult.hasErrors()) {
+            return "update_student";
+        }
+        List<Address> addressList = addressService.createAddressListFromDTO(addressListTransfer);
+        try {
+            Student updatedStudent = studentService.createStudentFromDTO(studentDTO, addressList);
+            addressService.saveAddressesOfStudent(updatedStudent);
+            studentService.updateStudent(id, updatedStudent);
+        } catch (TooYoungException youthExc) {
+            model.addAttribute("youthExc", youthExc.getMessage());
+            LOGGER.error(youthExc.getMessage());
+            return "update_student";
+        } catch (PeselDateNotMatchException peselDateExc) {
+            model.addAttribute("peselDateExc", peselDateExc.getMessage());
+            LOGGER.error(peselDateExc.getMessage());
+            return "update_student";
         }
         return "redirect:/";
     }

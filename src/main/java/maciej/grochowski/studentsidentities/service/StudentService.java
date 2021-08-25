@@ -48,6 +48,10 @@ public class StudentService {
         studentRepository.save(student);
     }
 
+    public void updateStudent(int id, Student student) {
+        studentRepository.save(student);
+    }
+
     public List<Student> getAllStudentsCriteria() {
         return studentRepository.getAllStudentsCriteria();
     }

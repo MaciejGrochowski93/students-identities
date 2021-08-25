@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+// THIS CONTROLLER CONTAINS METHODS FOR TESTING PURPOSES ONLY - WILL BE REMOVED ONCE I FINISH THE PROJECT
+
 @RestController
 @AllArgsConstructor
 public class TestingController {
@@ -23,17 +25,3 @@ public class TestingController {
         studentRepository.updateFirstName(id, firstName);
     }
 }
-
-
-//    NOT WORKING YET
-//    @GetMapping("/countStudentFromCity1/{city}")
-//    public Long getStudentsCountByCity(@PathVariable String city) {
-//        Long studentsCountByCity = addressRepository.countStudentsFromCity(city);
-//        LOGGER.info(String.valueOf(studentsCountByCity));
-//        return studentsCountByCity;
-//    }
-//
-//    @GetMapping("/countStudentsFromCity2/{city}")
-//    public Long countStudentsFromCity2(@PathVariable String city) {
-//        return studentRepository.getStudentsFromCity3333(city);
-//    }

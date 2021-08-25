@@ -36,7 +36,6 @@ public class CriteriaController {
         return "redirect:/";
     }
 
-
     // NOT WORKING YET
     @GetMapping("/students/cityCount")
     public String countStudentsFromCity(Model model, @RequestParam("studentsFromCity") String city) {
