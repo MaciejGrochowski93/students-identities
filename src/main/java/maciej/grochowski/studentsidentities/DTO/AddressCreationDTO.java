@@ -21,19 +21,19 @@ public class AddressCreationDTO {
         this.postalCode = postalCode;
     }
 
-    @NotBlank(message = "Please, provide the name of your street.")
+    @NotBlank(message = "")
     @Length(max = 50, message = "Street name must consist of 1 to 50 letters.")
     private String street;
 
-    @NotBlank(message = "Please, provide the name of your street.")
+    @NotBlank(message = "")
     @Length(max = 50, message = "Street name must consist of 1 to 50 letters.")
     private String houseNr;
 
-    @NotBlank(message = "Please, provide the name of your city.")
+    @NotBlank(message = "")
     @Length(max = 30, message = "City name must consist of 1 to 30 letters")
     private String city;
 
-    @NotBlank(message = "Please, provide your postal code.")
+    @NotBlank(message = "")
     @Length(min = 6, max = 6, message = "Postal code must consist of 6 letters")
     private String postalCode;
 

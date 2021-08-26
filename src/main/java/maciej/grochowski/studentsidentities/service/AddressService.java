@@ -5,7 +5,6 @@ import maciej.grochowski.studentsidentities.DTO.AddressCreationDTO;
 import maciej.grochowski.studentsidentities.DTO.AddressListTransfer;
 import maciej.grochowski.studentsidentities.DTO.AddressType;
 import maciej.grochowski.studentsidentities.entity.Address;
-import maciej.grochowski.studentsidentities.entity.Student;
 import maciej.grochowski.studentsidentities.repository.AddressRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +21,8 @@ public class AddressService {
         return addressRepository.findAll();
     }
 
-    public List<Address> createAddressListFromDTO(AddressListTransfer addressListTransfer) {
-        List<AddressCreationDTO> addressCreationDTOList = addressListTransfer.getAddressDTOList();
+    public List<Address> createAddressListFromTransfer(AddressListTransfer addressListTransfer) {
+        List<AddressCreationDTO> addressCreationDTOList = addressListTransfer.initListOfThreeAddressDTO();
         List<Address> addressList = new ArrayList<>();
 
         for (AddressCreationDTO addressDTO : addressCreationDTOList) {
@@ -36,15 +35,14 @@ public class AddressService {
 
             addressList.add(address);
         }
-        addressList.get(0).setType(AddressType.PERMANENT);
-        addressList.get(1).setType(AddressType.RESIDENTIAL);
-        addressList.get(2).setType(AddressType.CORRESPONDENCE);
+        initAddressTypesOnAddressList(addressList);
         return addressList;
     }
 
-    public void saveAddressesOfStudent(Student student) {
-        List<Address> addressList = student.getAddressList();
-        addressList.forEach(address -> address.setStudent(student));
+    private void initAddressTypesOnAddressList(List<Address> addressList) {
+        if (addressList.contains(addressList.get(0))) addressList.get(0).setType(AddressType.PERMANENT);
+        if (addressList.contains(addressList.get(1))) addressList.get(1).setType(AddressType.RESIDENTIAL);
+        if (addressList.contains(addressList.get(2))) addressList.get(2).setType(AddressType.CORRESPONDENCE);
     }
 
     public Long countStudentsFromCity(String city) {

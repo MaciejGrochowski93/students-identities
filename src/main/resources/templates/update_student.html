@@ -11,7 +11,7 @@
     <br>
     <h4>Your identities:</h4>
     <br>
-    <form th:action="@{'/updateStudent/' + ${student.id}}" th:object="${studentDTOForm}" method="POST">
+    <form th:action="@{'/student/updateStudent/' + ${id}}" th:object="${studentDTOForm}" method="POST">
 
         <label>Your first name:</label>
         <input type="text" th:field="*{firstName}" name="firstName"
@@ -54,19 +54,23 @@
                 <br>
                 <label>City</label>
                 <input th:field="*{addressDTOList[__${itemStat.index}__].city}" class="form-control mb-4 col-4"/>
+                <div th:if="${#fields.hasErrors('addressDTOList[__${itemStat.index}__].city')}" class="alert alert-warning"
+                     th:errors="*{addressDTOList[__${itemStat.index}__].city}"></div>
 
                 <label>Street</label>
                 <input th:field="*{addressDTOList[__${itemStat.index}__].street}" class="form-control mb-4 col-4"/>
+                <div th:if="${#fields.hasErrors('addressDTOList[__${itemStat.index}__].street')}" class="alert alert-warning"
+                     th:errors="*{addressDTOList[__${itemStat.index}__].street}"></div>
 
                 <label>House number</label>
                 <input th:field="*{addressDTOList[__${itemStat.index}__].houseNr}" class="form-control mb-4 col-4"/>
+                <div th:if="${#fields.hasErrors('addressDTOList[__${itemStat.index}__].houseNr')}" class="alert alert-warning"
+                     th:errors="*{addressDTOList[__${itemStat.index}__].houseNr}"></div>
 
                 <label>Postal code</label>
                 <input th:field="*{addressDTOList[__${itemStat.index}__].postalCode}" class="form-control mb-4 col-4"/>
-
-                <div th:if="${#fields.hasAnyErrors()}" class="alert alert-warning">
-                    <span>Please, provide all required Addresses attributes.</span>
-                </div>
+                <div th:if="${#fields.hasErrors('addressDTOList[__${itemStat.index}__].postalCode')}" class="alert alert-warning"
+                     th:errors="*{addressDTOList[__${itemStat.index}__].postalCode}"></div>
             </tr>
         </div>
         <button type="submit" class="btn btn-info col-1">Register</button>

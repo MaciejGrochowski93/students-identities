@@ -29,7 +29,6 @@ public class StudentCreationDTO {
     @Length(min = 1, max = 20, message = "Your first name must consist of 1 to 20 letters.")
     private String firstName;
 
-    //    @Length(min = 1, max = 20, message = "Your middle name must consist of 1 to 20 letters.")
     private String middleName;
 
     @NotBlank(message = "")

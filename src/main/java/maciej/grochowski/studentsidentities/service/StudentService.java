@@ -1,6 +1,7 @@
 package maciej.grochowski.studentsidentities.service;
 
 import maciej.grochowski.studentsidentities.DTO.AddressCreationDTO;
+import maciej.grochowski.studentsidentities.DTO.AddressType;
 import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
 import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
@@ -36,19 +37,35 @@ public class StudentService {
         }
     }
 
-    public List<AddressCreationDTO> create3xAddressDTO() {
-        List<AddressCreationDTO> listDTO = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            listDTO.add(new AddressCreationDTO());
+    public StudentCreationDTO createDTOFromStudent(Student student) {
+        List<Address> addressList = student.getAddressList();
+        List<AddressCreationDTO> DTOList = new ArrayList<>();
+        for (Address address : addressList) {
+            AddressCreationDTO addressDTO = new AddressCreationDTO();
+            addressDTO.setCity(address.getCity());
+            addressDTO.setStreet(address.getStreet());
+            addressDTO.setHouseNr(address.getHouseNr());
+            addressDTO.setPostalCode(address.getPostalCode());
+            addressDTO.setType(address.getType());
+            DTOList.add(addressDTO);
         }
-        return listDTO;
+            if (addressList.contains(addressList.get(0)))  addressList.get(0).setType(AddressType.PERMANENT);
+            if (addressList.contains(addressList.get(1)))  addressList.get(1).setType(AddressType.RESIDENTIAL);
+            if (addressList.contains(addressList.get(2))) addressList.get(2).setType(AddressType.CORRESPONDENCE);
+
+        return new StudentCreationDTO(student.getFirstName(), student.getMiddleName(),
+                student.getLastName(), student.getPesel(), student.getDob(), DTOList);
     }
 
     public void addStudent(Student student) {
+        List<Address> addressList = student.getAddressList();
+        addressList.forEach(address -> address.setStudent(student));
         studentRepository.save(student);
     }
 
     public void updateStudent(int id, Student student) {
+        List<Address> addressList = student.getAddressList();
+        addressList.forEach(address -> address.setStudent(student));
         studentRepository.save(student);
     }
 

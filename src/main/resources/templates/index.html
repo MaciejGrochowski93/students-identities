@@ -27,13 +27,13 @@
             <td th:text="${students.lastName}"></td>
             <td th:text="${students.dob}"></td>
             <td th:text="${students.pesel}"></td>
-            <td><a th:href="@{'/student/' + ${students.id} + '/addresses'}" class="btn btn-success">Addresses</a></td>
-            <td><a th:href="@{'/updateStudent/' + ${students.id}}" class="btn btn-warning">Update</a></td>
+            <td><a th:href="@{'/student/addresses/' + ${students.id}}" class="btn btn-success">Addresses</a></td>
+            <td><a th:href="@{'/student/updateStudent/' + ${students.id}}" class="btn btn-warning">Update</a></td>
         </tr>
         </tbody>
     </table>
     <br>
-    <td><a th:href="@{/addStudent}" class="btn btn-primary">Add Student</a></td>
+    <td><a th:href="@{/student/addStudent}" class="btn btn-primary">Add Student</a></td>
 
     <br><br><br>
 
