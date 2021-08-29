@@ -1,27 +1,20 @@
 package maciej.grochowski.studentsidentities.controller;
 
 import lombok.AllArgsConstructor;
-import maciej.grochowski.studentsidentities.DTO.AddressCreationDTO;
-import maciej.grochowski.studentsidentities.DTO.AddressListTransfer;
-import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
-import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
-import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException;
-import maciej.grochowski.studentsidentities.exception.TooYoungException;
 import maciej.grochowski.studentsidentities.service.AddressService;
 import maciej.grochowski.studentsidentities.service.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.validation.Valid;
 import java.util.List;
 
-@Controller
 @AllArgsConstructor
+@Controller
 public class HomeController {
 
     private final StudentService studentService;

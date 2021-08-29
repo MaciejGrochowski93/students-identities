@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
 @AllArgsConstructor
+@Service
 public class AddressService {
 
-    private AddressRepository addressRepository;
+    private final AddressRepository addressRepository;
 
     public List<Address> findAllAddresses() {
         return addressRepository.findAll();

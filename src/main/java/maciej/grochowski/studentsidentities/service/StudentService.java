@@ -1,5 +1,6 @@
 package maciej.grochowski.studentsidentities.service;
 
+import lombok.AllArgsConstructor;
 import maciej.grochowski.studentsidentities.DTO.AddressCreationDTO;
 import maciej.grochowski.studentsidentities.DTO.AddressType;
 import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
@@ -9,21 +10,17 @@ import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException
 import maciej.grochowski.studentsidentities.exception.TooYoungException;
 import maciej.grochowski.studentsidentities.repository.StudentRepository;
 import maciej.grochowski.studentsidentities.utils.StudentUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@AllArgsConstructor
 @Service
 public class StudentService {
 
-    @Autowired
-    private StudentRepository studentRepository;
-    private final StudentUtils utils = new StudentUtils();
-    private final static Logger LOGGER = LoggerFactory.getLogger(StudentService.class);
+    private final StudentRepository studentRepository;
+    private final StudentUtils utils;
 
     public Student createStudentFromDTO(StudentCreationDTO DTO, List<Address> addressList) throws PeselDateNotMatchException, TooYoungException {
         utils.validatePesel(DTO);
@@ -49,9 +46,9 @@ public class StudentService {
             addressDTO.setType(address.getType());
             DTOList.add(addressDTO);
         }
-            if (addressList.contains(addressList.get(0)))  addressList.get(0).setType(AddressType.PERMANENT);
-            if (addressList.contains(addressList.get(1)))  addressList.get(1).setType(AddressType.RESIDENTIAL);
-            if (addressList.contains(addressList.get(2))) addressList.get(2).setType(AddressType.CORRESPONDENCE);
+        addressList.get(0).setType(AddressType.PERMANENT);
+        addressList.get(1).setType(AddressType.RESIDENTIAL);
+        addressList.get(2).setType(AddressType.CORRESPONDENCE);
 
         return new StudentCreationDTO(student.getFirstName(), student.getMiddleName(),
                 student.getLastName(), student.getPesel(), student.getDob(), DTOList);

@@ -1,32 +1,26 @@
 package maciej.grochowski.studentsidentities.controller;
 
+import lombok.AllArgsConstructor;
 import maciej.grochowski.studentsidentities.service.AddressService;
 import maciej.grochowski.studentsidentities.service.StudentService;
 import maciej.grochowski.studentsidentities.utils.StudentUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 
+@AllArgsConstructor
 @Controller
 public class SortingController {
 
-    @Autowired
-    private StudentService studentService;
-    @Autowired
-    private AddressService addressService;
-
-    private final StudentUtils studentUtils = new StudentUtils();
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(SortingController.class);
+    private final StudentService studentService;
+    private final AddressService addressService;
+    private final StudentUtils studentUtils;
 
     @GetMapping("/sortByFirstName")
     public String sortByFirstName() {
         studentService.sortByFirstName();
-        return "redirect:/";
+        return "redirect:/index";
     }
 
     @GetMapping("/sortByMiddleName")

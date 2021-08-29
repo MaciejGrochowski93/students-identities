@@ -1,15 +1,16 @@
 package maciej.grochowski.studentsidentities.utils;
 
 import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
-import maciej.grochowski.studentsidentities.entity.Student;
 import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException;
 import maciej.grochowski.studentsidentities.exception.TooYoungException;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Optional;
 
+@Component
 public class StudentUtils {
 
     public void validateAge(StudentCreationDTO DTO) throws TooYoungException {

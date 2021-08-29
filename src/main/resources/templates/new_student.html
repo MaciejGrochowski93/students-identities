@@ -11,7 +11,7 @@
     <br>
     <h4>Your identities:</h4>
     <br>
-    <form th:action="@{/addStudent}" th:object="${studentDTOForm}" method="POST">
+    <form th:action="@{/student/addStudent}" th:object="${studentDTOForm}" method="POST">
 
         <label>Your first name:</label>
         <input type="text" th:field="*{firstName}" name="firstName"

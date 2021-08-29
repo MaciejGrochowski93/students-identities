@@ -59,7 +59,7 @@ class StudentsIdentitiesApplicationTests {
         DTO.setDob(LocalDate.of(1993, 2, 17));
         assertDoesNotThrow(() -> utils.validatePesel(DTO));
 
-        DTO.setPesel("123456789123");
+        DTO.setPesel("12345678912");
         assertThrows(PeselDateNotMatchException.class, () -> utils.validatePesel(DTO));
 
         DTO.setPesel("930217abcde");

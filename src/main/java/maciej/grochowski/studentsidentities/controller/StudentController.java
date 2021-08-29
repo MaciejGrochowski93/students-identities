@@ -1,5 +1,6 @@
 package maciej.grochowski.studentsidentities.controller;
 
+import lombok.AllArgsConstructor;
 import maciej.grochowski.studentsidentities.DTO.AddressCreationDTO;
 import maciej.grochowski.studentsidentities.DTO.AddressListTransfer;
 import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
@@ -9,29 +10,23 @@ import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException
 import maciej.grochowski.studentsidentities.exception.TooYoungException;
 import maciej.grochowski.studentsidentities.service.AddressService;
 import maciej.grochowski.studentsidentities.service.StudentService;
-import maciej.grochowski.studentsidentities.utils.StudentUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
+@AllArgsConstructor
 @Controller
 @RequestMapping("/student")
 public class StudentController {
 
-    @Autowired
-    private StudentService studentService;
-    @Autowired
-    private AddressService addressService;
-
-    private StudentUtils studentUtils = new StudentUtils();
+    private final StudentService studentService;
+    private final AddressService addressService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
 
@@ -69,7 +64,7 @@ public class StudentController {
             LOGGER.error(peselDateExc.getMessage());
             return "new_student";
         }
-        return "redirect:/";
+        return "index";
     }
 
     @GetMapping("/updateStudent/{id}")
@@ -116,7 +111,7 @@ public class StudentController {
     @GetMapping("/deleteStudent/{id}")
     public String deleteStudentById(@PathVariable int id) {
         studentService.deleteStudentById(id);
-        return "/";
+        return "index";
     }
 
     @GetMapping("/addresses/{id}")
