@@ -20,7 +20,7 @@ public class SortingController {
     @GetMapping("/sortByFirstName")
     public String sortByFirstName() {
         studentService.sortByFirstName();
-        return "redirect:/index";
+        return "redirect:/";
     }
 
     @GetMapping("/sortByMiddleName")
