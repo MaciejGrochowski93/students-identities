@@ -1,6 +1,8 @@
 package maciej.grochowski.studentsidentities.service;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import maciej.grochowski.studentsidentities.DTO.AddressCreationDTO;
 import maciej.grochowski.studentsidentities.DTO.AddressType;
 import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
@@ -12,10 +14,13 @@ import maciej.grochowski.studentsidentities.repository.StudentRepository;
 import maciej.grochowski.studentsidentities.utils.StudentUtils;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
+@Getter
+@Setter
 @Service
 public class StudentService {
 
@@ -39,6 +44,7 @@ public class StudentService {
         List<AddressCreationDTO> DTOList = new ArrayList<>();
         for (Address address : addressList) {
             AddressCreationDTO addressDTO = new AddressCreationDTO();
+            addressDTO.setId(address.getId());
             addressDTO.setCity(address.getCity());
             addressDTO.setStreet(address.getStreet());
             addressDTO.setHouseNr(address.getHouseNr());
@@ -46,10 +52,6 @@ public class StudentService {
             addressDTO.setType(address.getType());
             DTOList.add(addressDTO);
         }
-        addressList.get(0).setType(AddressType.PERMANENT);
-        addressList.get(1).setType(AddressType.RESIDENTIAL);
-        addressList.get(2).setType(AddressType.CORRESPONDENCE);
-
         return new StudentCreationDTO(student.getFirstName(), student.getMiddleName(),
                 student.getLastName(), student.getPesel(), student.getDob(), DTOList);
     }
@@ -60,14 +62,21 @@ public class StudentService {
         studentRepository.save(student);
     }
 
-    public void updateStudent(int id, Student student) {
-        List<Address> addressList = student.getAddressList();
-        addressList.forEach(address -> address.setStudent(student));
-        studentRepository.save(student);
+    @Transactional
+    public void updateStudent(Student existing, Student updated) {
+        existing.setFirstName(updated.getFirstName());
+        existing.setMiddleName(updated.getMiddleName());
+        existing.setLastName(updated.getLastName());
+        existing.setDob(updated.getDob());
+        existing.setPesel(updated.getPesel());
+        existing.setAddressList(updated.getAddressList());
+        List<Address> addressList = existing.getAddressList();
+        addressList.forEach(address -> address.setStudent(existing));
+        studentRepository.save(existing);
     }
 
     public List<Student> getAllStudentsCriteria() {
-        return studentRepository.getAllStudentsCriteria();
+        return studentRepository.getAllStudentsByCriteria();
     }
 
     public void sortByFirstName() {

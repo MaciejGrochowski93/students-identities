@@ -33,7 +33,6 @@ public class StudentUtils {
         if (!sixLettersFromDOB.equals(sixLettersFromPESEL)) {
             throw new PeselDateNotMatchException("PESEL and date of birth do not match. Please, check them again.");
         }
-
     }
 
     public boolean isNumeric(String numberWord) {

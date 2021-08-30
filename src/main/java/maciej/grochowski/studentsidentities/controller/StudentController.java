@@ -31,7 +31,7 @@ public class StudentController {
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
 
     @GetMapping("/addStudent")
-    public String addStudentForm(@Valid Model model) {
+    public String addStudentForm(Model model) {
         AddressListTransfer addressListTransfer = new AddressListTransfer();
         List<AddressCreationDTO> addressCreationDTOS = addressListTransfer.initListOfThreeAddressDTO();
         addressListTransfer.setAddressDTOList(addressCreationDTOS);
@@ -45,7 +45,7 @@ public class StudentController {
     public String addStudent(@ModelAttribute("studentDTOForm") @Valid StudentCreationDTO studentDTOForm,
                              BindingResult studentResult,
                              @ModelAttribute("addressListForm") @Valid AddressListTransfer addressTransfer,
-                             BindingResult addressResult, Model model) {
+                             BindingResult addressResult, @Valid Model model) {
         if (studentResult.hasErrors() || addressResult.hasErrors()) {
             return "new_student";
         }
@@ -64,11 +64,11 @@ public class StudentController {
             LOGGER.error(peselDateExc.getMessage());
             return "new_student";
         }
-        return "index";
+        return "redirect:/";
     }
 
     @GetMapping("/updateStudent/{id}")
-    public String updateStudent(@PathVariable int id, @Valid Model model) {
+    public String updateStudent(@PathVariable int id, Model model) {
         Student student = studentService.getStudentById(id);
         StudentCreationDTO fetchedDTO = studentService.createDTOFromStudent(student);
 
@@ -90,11 +90,11 @@ public class StudentController {
             return "update_student";
         }
 
-        List<Address> addressList = addressService.createAddressListFromTransfer(addressListTransfer);
-
         try {
-            Student updatedStudent = studentService.createStudentFromDTO(studentDTO, addressList);
-            studentService.updateStudent(id, updatedStudent);
+            Student existingStudent = studentService.getStudentById(id);
+            List<Address> addressList = addressService.createAddressListFromTransfer(addressListTransfer);
+            Student studentWithUpdates = studentService.createStudentFromDTO(studentDTO, addressList);
+            studentService.updateStudent(existingStudent, studentWithUpdates);
         } catch (TooYoungException youthExc) {
             model.addAttribute("youthExc", youthExc.getMessage());
             LOGGER.error(youthExc.getMessage());
@@ -111,7 +111,7 @@ public class StudentController {
     @GetMapping("/deleteStudent/{id}")
     public String deleteStudentById(@PathVariable int id) {
         studentService.deleteStudentById(id);
-        return "index";
+        return "redirect:/";
     }
 
     @GetMapping("/addresses/{id}")

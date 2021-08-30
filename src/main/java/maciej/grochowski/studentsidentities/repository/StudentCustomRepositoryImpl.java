@@ -19,15 +19,12 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
 
     @Autowired
     private EntityManager entityManager;
-    @Autowired
-    private AddressRepository addressRepository;
-
     private Sort.Direction sortDirection = Sort.Direction.ASC;
-    private String criteriaWord;
-    private int number = 1;
+    private String criteriaSearchWord;
+    private int criteriaSortNumber = 1;
 
     @Override
-    public List<Student> getAllStudentsCriteria() {
+    public List<Student> getAllStudentsByCriteria() {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Student> criteriaQuery = criteriaBuilder.createQuery(Student.class);
         Root<Student> studentRoot = criteriaQuery.from(Student.class);
@@ -35,34 +32,34 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
         Predicate predicate = studentRoot.isNotNull();
         criteriaQuery.where(predicate);
 
-        setCriteriaWord();
+        setCriteriaSearchWord();
         if (sortDirection.isAscending()) {
-            criteriaQuery.orderBy(criteriaBuilder.asc(studentRoot.get(criteriaWord)));
+            criteriaQuery.orderBy(criteriaBuilder.asc(studentRoot.get(criteriaSearchWord)));
         } else {
-            criteriaQuery.orderBy(criteriaBuilder.desc(studentRoot.get(criteriaWord)));
+            criteriaQuery.orderBy(criteriaBuilder.desc(studentRoot.get(criteriaSearchWord)));
         }
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
-    private void setCriteriaWord() {
-        switch (number) {
+    private void setCriteriaSearchWord() {
+        switch (criteriaSortNumber) {
             case 2:
-                criteriaWord = "middleName";
+                criteriaSearchWord = "middleName";
                 break;
             case 3:
-                criteriaWord = "lastName";
+                criteriaSearchWord = "lastName";
                 break;
             case 4:
-                criteriaWord = "dob";
+                criteriaSearchWord = "dob";
                 break;
             default:
-                criteriaWord = "firstName";
+                criteriaSearchWord = "firstName";
         }
     }
 
     @Override
     public void sortByFirstName() {
-        number = 1;
+        criteriaSortNumber = 1;
         if (sortDirection.isAscending()) {
             sortDirection = Sort.Direction.DESC;
         } else {
@@ -72,7 +69,7 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
 
     @Override
     public void sortByMiddleName() {
-        number = 2;
+        criteriaSortNumber = 2;
         if (sortDirection.isAscending()) {
             sortDirection = Sort.Direction.DESC;
         } else {
@@ -82,7 +79,7 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
 
     @Override
     public void sortByLastName() {
-        number = 3;
+        criteriaSortNumber = 3;
         if (sortDirection.isAscending()) {
             sortDirection = Sort.Direction.DESC;
         } else {
@@ -92,7 +89,7 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
 
     @Override
     public void sortByAge() {
-        number = 4;
+        criteriaSortNumber = 4;
         if (sortDirection.isAscending()) {
             sortDirection = Sort.Direction.DESC;
         } else {
@@ -119,22 +116,22 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
         return typedQuery.getSingleResult();
     }
 
-    @Override
-    public Long getStudentsFromCity3333(String city) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class); // co chcę uzyskać, określa wynik
-        Root<Student> root = criteriaQuery.from(Student.class);                             // co przeglądam
-        Join<Object, Object> address = root.join(Student_.ADDRESS_LIST);
-
-        ParameterExpression<String> addressCity = criteriaBuilder.parameter(String.class);
-        criteriaQuery.where(criteriaBuilder.equal(address.get(Address_.CITY), addressCity));
-
-        criteriaQuery.select(criteriaBuilder.count(root));
-
-        TypedQuery<Long> typedQuery = entityManager.createQuery(criteriaQuery);
-        typedQuery.setParameter(addressCity, city);
-        return typedQuery.getSingleResult();
-    }
+//    @Override
+//    public Long getStudentsFromCity2(String city) {
+//        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+//        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class); // co chcę uzyskać, określa wynik
+//        Root<Student> root = criteriaQuery.from(Student.class);                             // co przeglądam
+//        Join<Object, Object> address = root.join(Student_.ADDRESS_LIST);
+//
+//        ParameterExpression<String> addressCity = criteriaBuilder.parameter(String.class);
+//        criteriaQuery.where(criteriaBuilder.equal(address.get(Address_.CITY), addressCity));
+//
+//        criteriaQuery.select(criteriaBuilder.count(root));
+//
+//        TypedQuery<Long> typedQuery = entityManager.createQuery(criteriaQuery);
+//        typedQuery.setParameter(addressCity, city);
+//        return typedQuery.getSingleResult();
+//    }
 
     @Override
     public Student getStudentByID(int id) {

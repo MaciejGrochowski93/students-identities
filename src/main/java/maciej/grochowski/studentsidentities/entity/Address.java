@@ -1,12 +1,10 @@
 package maciej.grochowski.studentsidentities.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import maciej.grochowski.studentsidentities.DTO.AddressType;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -41,4 +39,17 @@ public class Address {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "student_id")
     public Student student;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Address)) return false;
+        Address address = (Address) o;
+        return Objects.equals(getId(), address.getId()) && Objects.equals(getStreet(), address.getStreet()) && Objects.equals(getHouseNr(), address.getHouseNr()) && Objects.equals(getCity(), address.getCity()) && Objects.equals(getPostalCode(), address.getPostalCode()) && getType() == address.getType() && Objects.equals(getStudent(), address.getStudent());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getStreet(), getHouseNr(), getCity(), getPostalCode(), getType(), getStudent());
+    }
 }

@@ -1,17 +1,17 @@
 package maciej.grochowski.studentsidentities.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Student {
@@ -38,23 +38,22 @@ public class Student {
     @Column(name = "student_id")
     private Integer id;
 
-    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name = "middle_name")
     private String middleName;
 
-    @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "pesel")
     private String pesel;
 
     @Column(name = "date_of_birth")
     private LocalDate dob;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "student",
+            cascade = CascadeType.ALL
+            , orphanRemoval = true
+    )
     private List<Address> addressList;
 
     public List<Address> getAddressList() {
@@ -64,8 +63,9 @@ public class Student {
         return addressList;
     }
 
-    public void setAddressList(List<Address> addressList) {
-        this.addressList = addressList;
+    public void setAddressList(List<Address> list) {
+        this.addressList.clear();
+        this.addressList.addAll(list);
     }
 
     public Integer getId() {
@@ -74,6 +74,19 @@ public class Student {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Student)) return false;
+        Student student = (Student) o;
+        return Objects.equals(getId(), student.getId()) && Objects.equals(getFirstName(), student.getFirstName()) && getMiddleName().equals(student.getMiddleName()) && Objects.equals(getLastName(), student.getLastName()) && Objects.equals(getPesel(), student.getPesel()) && Objects.equals(getDob(), student.getDob()) && Objects.equals(getAddressList(), student.getAddressList());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getFirstName(), getMiddleName(), getLastName(), getPesel(), getDob(), getAddressList());
     }
 }
 

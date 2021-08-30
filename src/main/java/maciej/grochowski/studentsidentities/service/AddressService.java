@@ -31,8 +31,6 @@ public class AddressService {
             address.setStreet(addressDTO.getStreet());
             address.setHouseNr(addressDTO.getHouseNr());
             address.setPostalCode(addressDTO.getPostalCode());
-            address.setType(addressDTO.getType());
-
             addressList.add(address);
         }
         initAddressTypesOnAddressList(addressList);
@@ -40,9 +38,9 @@ public class AddressService {
     }
 
     private void initAddressTypesOnAddressList(List<Address> addressList) {
-        if (addressList.contains(addressList.get(0))) addressList.get(0).setType(AddressType.PERMANENT);
-        if (addressList.contains(addressList.get(1))) addressList.get(1).setType(AddressType.RESIDENTIAL);
-        if (addressList.contains(addressList.get(2))) addressList.get(2).setType(AddressType.CORRESPONDENCE);
+        addressList.get(0).setType(AddressType.PERMANENT);
+        addressList.get(1).setType(AddressType.RESIDENTIAL);
+        addressList.get(2).setType(AddressType.CORRESPONDENCE);
     }
 
     public Long countStudentsFromCity(String city) {

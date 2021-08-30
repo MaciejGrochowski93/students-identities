@@ -1,8 +1,6 @@
 package maciej.grochowski.studentsidentities.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -14,8 +12,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class StudentCreationDTO {
 
     public StudentCreationDTO(String firstName, String lastName, String pesel, LocalDate dob) {
