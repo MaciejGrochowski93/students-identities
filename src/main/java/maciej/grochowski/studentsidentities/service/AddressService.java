@@ -8,6 +8,7 @@ import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.repository.AddressRepository;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,13 @@ public class AddressService {
 
     public List<Address> findAllAddresses() {
         return addressRepository.findAll();
+    }
+
+    public AddressListTransfer initListTransfer() {
+        AddressListTransfer addressListTransfer = new AddressListTransfer();
+        List<AddressCreationDTO> addressCreationDTOS = addressListTransfer.initListOfThreeAddressDTO();
+        addressListTransfer.setAddressDTOList(addressCreationDTOS);
+        return addressListTransfer;
     }
 
     public List<Address> createAddressListFromTransfer(AddressListTransfer addressListTransfer) {
@@ -35,6 +43,34 @@ public class AddressService {
         }
         initAddressTypesOnAddressList(addressList);
         return addressList;
+    }
+
+    public AddressListTransfer createTransferFromAddressList(List<Address> addressList) {
+        List<AddressCreationDTO> addressCreationDTOList = new ArrayList<>();
+
+        for (Address address : addressList) {
+            AddressCreationDTO DTO = new AddressCreationDTO();
+            DTO.setCity(address.getCity());
+            DTO.setStreet(address.getStreet());
+            DTO.setHouseNr(address.getHouseNr());
+            DTO.setPostalCode(address.getPostalCode());
+            DTO.setType(address.getType());
+            addressCreationDTOList.add(DTO);
+        }
+        AddressListTransfer listTransfer = new AddressListTransfer();
+        listTransfer.setAddressDTOList(addressCreationDTOList);
+        return listTransfer;
+    }
+
+    public void updateAddress(List<Address> addressList, AddressListTransfer listTransfer) {
+        List<@Valid AddressCreationDTO> addressDTOList = listTransfer.getAddressDTOList();
+        addressList.forEach(address -> {
+            address.setCity(addressDTOList.get(addressList.indexOf(address)).getCity());
+            address.setStreet(addressDTOList.get(addressList.indexOf(address)).getStreet());
+            address.setHouseNr(addressDTOList.get(addressList.indexOf(address)).getHouseNr());
+            address.setPostalCode(addressDTOList.get(addressList.indexOf(address)).getPostalCode());
+            addressRepository.save(address);
+        });
     }
 
     private void initAddressTypesOnAddressList(List<Address> addressList) {
