@@ -1,13 +1,14 @@
 package maciej.grochowski.studentsidentities.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -50,43 +51,7 @@ public class Student {
     private LocalDate dob;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "student",
-            cascade = CascadeType.ALL
-            , orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addressList;
-
-    public List<Address> getAddressList() {
-        if (addressList == null) {
-            addressList = new ArrayList<>();
-        }
-        return addressList;
-    }
-
-    public void setAddressList(List<Address> list) {
-        this.addressList.clear();
-        this.addressList.addAll(list);
-    }
-
-    public Integer getId() {
-        return this.id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Student)) return false;
-        Student student = (Student) o;
-        return Objects.equals(getId(), student.getId()) && Objects.equals(getFirstName(), student.getFirstName()) && getMiddleName().equals(student.getMiddleName()) && Objects.equals(getLastName(), student.getLastName()) && Objects.equals(getPesel(), student.getPesel()) && Objects.equals(getDob(), student.getDob()) && Objects.equals(getAddressList(), student.getAddressList());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getMiddleName(), getLastName(), getPesel(), getDob(), getAddressList());
-    }
 }
 

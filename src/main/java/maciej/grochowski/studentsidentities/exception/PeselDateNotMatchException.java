@@ -1,6 +1,6 @@
 package maciej.grochowski.studentsidentities.exception;
 
-public class PeselDateNotMatchException extends Exception{
+public class PeselDateNotMatchException extends RuntimeException{
     public PeselDateNotMatchException() {
     }
 

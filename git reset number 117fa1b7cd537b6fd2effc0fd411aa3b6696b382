@@ -1,0 +1,23 @@
+[33mea1db0d49d9278761a136f43fd7744f217cd9b99[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m the first attempt to rework Page/Sort
+[33mb4fed4bd8f2408271888dc2ae22117f486f6e2ee[m fixing deleteStudentById() method
+[33m117fa1b7cd537b6fd2effc0fd411aa3b6696b382[m reworking add/update methods
+[33mc6f4478927234f7f24763f5d2ff312f1aae01aad[m[33m ([m[1;31morigin/main[m[33m)[m reworking 'updateStudent' method, fixing AdressDTO validation @Length -> min issue
+[33m46d29034842b72b1cff5dca10726a7e90744d52c[m correcting typo
+[33m0c99a149d7996199e06af03fc4b186d0883c1a18[m changing bean creation from @Autowired into Constructor parameters
+[33m32ede876d64dba7e2c38ba86f5d093efe5c3bed2[m reworking Controllers, updating some DTO
+[33m150658c88d995c2aae8318092de665c8818fde27[m adding *unfinished* updateStudent
+[33me391e7ccbdff346a2296f4191ddda14910838d03[m adding several Tests
+[33m1e8ce167b55a6d65d05869b61a4352ee56b7e8cf[m fixing Student age validation - reworking PeselDate/TooYoungException, changing booleans into voids (and making them validate DTO instead of Student)
+[33m1de56e668d7c8de38454948502564521c159fdab[m cleaning the code
+[33m4ce896d1ad3952bc69b1a81f8a01dcf4dcd1db95[m moving methods from @RestController to @Controller
+[33ma3135f0b072f4465406a85572462ae16ebfc562a[m fixing Address/Student validation (not completed yet), adding CRUD criterias
+[33m20003ad27a22fd2638cb35916b24ac4b3041c505[m refractoring 'getStudentsOfAge' into 'countStudentsOfAge
+[33m5581d1ae91569000baa76caa04e91bd973a3ce7e[m adding SortBy_firstName/lastName/Age buttons
+[33mcb3d95925b7ca486351a9d2084669cd4eb992c1a[m fixing findStudentsOfAge(age)
+[33m415c85e6b6d0d63f39a22656a695b15dffa49a67[m adding some >findBy< Criterias
+[33mad347e8f7ea8a8f9bc4bd547d6c5cd1ebc25ee53[m adding initial Criterias
+[33mb6095a71873487f56685d5779be327209f12b2ba[m setting database connections
+[33m4117271572eec9a180851c8ceada35dcc16db2b3[m reworking address class, adding some hard coded logic
+[33m3d7b6fa06518ee0e4c19a0531916ebae56a71aaf[m adding AbstractAddress with inheriting classes
+[33md0e1aa5404560b3e4eba78a581f4b811b0c0390c[m adding Student Utils, initial front-end
+[33m87f1e17ea8bb9758f9a632943aa1333bfd64bc02[m adding Address, Student, StudentAddress

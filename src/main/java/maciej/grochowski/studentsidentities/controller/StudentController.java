@@ -7,10 +7,12 @@ import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
 import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException;
 import maciej.grochowski.studentsidentities.exception.TooYoungException;
+import maciej.grochowski.studentsidentities.model.StudentPage;
 import maciej.grochowski.studentsidentities.service.AddressService;
 import maciej.grochowski.studentsidentities.service.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -80,50 +82,71 @@ public class StudentController {
 
     @PostMapping("/updateStudent/{id}")
     public String updateStudent(@ModelAttribute("studentDTOForm") @Valid StudentCreationDTO studentDTO,
-                                BindingResult studentResult, @PathVariable int id,
-                                Model model) {
+                                BindingResult studentResult, @PathVariable int id, Model model) {
         if (studentResult.hasErrors()) {
-            return "redirect:/student/updateStudent/{id}";
+            return "update_student";
         }
-        studentService.updateStudent(id, studentDTO);
+
+        try {
+            studentService.updateStudent(id, studentDTO);
+        } catch (TooYoungException youthExc) {
+            model.addAttribute("youthExc", youthExc.getMessage());
+            LOGGER.error(youthExc.getMessage());
+            return "update_student";
+        } catch (PeselDateNotMatchException peselDateExc) {
+            model.addAttribute("peselDateExc", peselDateExc.getMessage());
+            LOGGER.error(peselDateExc.getMessage());
+            return "update_student";
+        }
+
         return "redirect:/";
     }
 
     @GetMapping("/addresses/{id}/update")
     public String updateAddress(@PathVariable int id, Model model) {
-        List<Address> addressList = addressService.findAddressesByStudentId(id);
-        AddressListTransfer listTransfer = new AddressListTransfer();
-
+        AddressListTransfer addressListTransfer = addressService.createListTransferFromStudent(id);
 
         Student studentById = studentService.getStudentById(id);
         String studentName = String.format(studentById.getFirstName(), " ", studentById.getLastName());
-//        addressService.updateAddress();
 
         model.addAttribute("studentName", studentName);
-        model.addAttribute("addressList", addressList);
+        model.addAttribute("addressListTransfer", addressListTransfer);
         return "update_address";
     }
-//
-//    @PostMapping("/addresses/{id}/update")
-//    public String updateAddress(@PathVariable int id, @ModelAttribute ("addressList") @Valid List<Address> addressList) {
-//        Student studentById = studentService.getStudentById(id);
-//        String studentName = String.format(studentById.getFirstName(), " ", studentById.getLastName());
-//
-//        model.addAttribute("studentName", studentName);
-//        model.addAttribute("addressList", addressList);
-//        return "update_address";
-//    }
 
-    //    // NOT WORKING YET
-//    @GetMapping("/deleteStudent/{id}")
-//    public String deleteStudentById(@PathVariable int id) {
-//        studentService.deleteStudentById(id);
-//        return "redirect:/";
-//    }
+    @PostMapping("/addresses/{id}/update")
+    public String updateAddress(@ModelAttribute("addressListTransfer") @Valid AddressListTransfer listTransfer,
+                                BindingResult addressResult, Model model, @PathVariable int id) {
+        if (addressResult.hasErrors()) {
+            return "update_address";
+        }
+        addressService.updateAddressesOfStudentId(id, listTransfer);
+        return "redirect:/";
+    }
 
-//    @GetMapping("/deleteAddress/{id}")
-//    public String deleteAddressById(@PathVariable int id, HttpServletRequest request) {
-//        addressService.deleteAddressById(id);
-//        return studentUtils.getPreviousPageByRequest(request).orElse("redirect:/");
-//    }
+    @GetMapping("/deleteStudent/{id}")
+    public String deleteStudentById(@PathVariable int id) {
+        studentService.deleteStudentById(id);
+        return "redirect:/";
+    }
+
+    @GetMapping("/studentpage")
+    public String getStudentsPage(Model model) {
+        return listByPage(model, 1);
+    }
+
+    @GetMapping("/studentpage/{pageNr}")
+    public String listByPage(Model model, @PathVariable ("pageNr") int currentPageNr) {
+        Page<Student> studentsPage = studentService.listAll(currentPageNr);
+        List<Student> studentsList = studentsPage.getContent();
+
+        int totalPages = studentsPage.getTotalPages();
+        long totalElements = studentsPage.getTotalElements();
+
+        model.addAttribute("studentsListPage", studentsList);
+        model.addAttribute("currentPage", currentPageNr);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalElements", totalElements);
+        return "index";
+    }
 }

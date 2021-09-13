@@ -1,6 +1,6 @@
 package maciej.grochowski.studentsidentities.exception;
 
-public class TooYoungException extends Exception{
+public class TooYoungException extends RuntimeException{
     public TooYoungException() {
     }
 

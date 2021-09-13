@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <div th:replace="fragments/head :: headPart"></div>
+</head>
+<body>
+<div th:replace="fragments/nav :: navbar"></div>
+<div class="container">
+    <br>
+    <h2>Update Addresses</h2>
+    <br>
+    <h4>Your identities:</h4>
+    <br>
+    <form th:action="@{'/student/addresses/' + ${id} + '/update'}" th:object="${addressListTransfer}" method="POST">
+        <h4>Your addresses:</h4>
+        <div>
+            <tr th:each="addressCreationDTO, itemStat : *{addressDTOList}">
+                <br>
+                <label>City</label>
+
+                <input th:field="*{addressDTOList[__${itemStat.index}__].city}" class="form-control mb-4 col-4"/>
+                <div th:if="${#fields.hasErrors('addressDTOList[__${itemStat.index}__].city')}"
+                     class="alert alert-warning" th:errors="*{addressDTOList[__${itemStat.index}__].city}"></div>
+
+                <label>Street</label>
+                <input th:field="*{addressDTOList[__${itemStat.index}__].street}" class="form-control mb-4 col-4"/>
+                <div th:if="${#fields.hasErrors('addressDTOList[__${itemStat.index}__].street')}"
+                     class="alert alert-warning" th:errors="*{addressDTOList[__${itemStat.index}__].street}"></div>
+
+                <label>House number</label>
+                <input th:field="*{addressDTOList[__${itemStat.index}__].houseNr}" class="form-control mb-4 col-4"/>
+                <div th:if="${#fields.hasErrors('addressDTOList[__${itemStat.index}__].houseNr')}"
+                     class="alert alert-warning" th:errors="*{addressDTOList[__${itemStat.index}__].houseNr}"></div>
+
+                <label>Postal code</label>
+                <input th:field="*{addressDTOList[__${itemStat.index}__].postalCode}" class="form-control mb-4 col-4"/>
+                <div th:if="${#fields.hasErrors('addressDTOList[__${itemStat.index}__].postalCode')}"
+                     class="alert alert-warning" th:errors="*{addressDTOList[__${itemStat.index}__].postalCode}"></div>
+            </tr>
+        </div>
+        <button type="submit" class="btn btn-info col-1">Update</button>
+    </form>
+</div>
+</body>
+</html>

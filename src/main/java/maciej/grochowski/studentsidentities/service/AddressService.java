@@ -45,7 +45,8 @@ public class AddressService {
         return addressList;
     }
 
-    public AddressListTransfer createTransferFromAddressList(List<Address> addressList) {
+    public AddressListTransfer createListTransferFromStudent(int studentId) {
+        List<Address> addressList = findAddressesByStudentId(studentId);
         List<AddressCreationDTO> addressCreationDTOList = new ArrayList<>();
 
         for (Address address : addressList) {
@@ -62,7 +63,9 @@ public class AddressService {
         return listTransfer;
     }
 
-    public void updateAddress(List<Address> addressList, AddressListTransfer listTransfer) {
+    public void updateAddressesOfStudentId(int studentId, AddressListTransfer listTransfer) {
+        List<Address> addressList = findAddressesByStudentId(studentId);
+
         List<@Valid AddressCreationDTO> addressDTOList = listTransfer.getAddressDTOList();
         addressList.forEach(address -> {
             address.setCity(addressDTOList.get(addressList.indexOf(address)).getCity());

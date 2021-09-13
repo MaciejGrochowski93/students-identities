@@ -33,7 +33,7 @@
         </div>
 
         <label>Your pesel:</label>
-        <input type="text" th:field="*{pesel}" name="pesel" class="form-control mb-4 col-4"/>
+        <input type="number" th:field="*{pesel}" name="pesel" class="form-control mb-4 col-4"/>
         <div th:fragment="validation-error">
             <div th:if="${#fields.hasErrors('pesel')}" class="alert alert-warning" th:errors="*{pesel}"></div>
             <div th:if="${peselDateExc}" th:text="${peselDateExc}" class="alert alert-warning"></div>

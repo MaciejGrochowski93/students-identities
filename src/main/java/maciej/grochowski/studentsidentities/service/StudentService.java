@@ -10,13 +10,19 @@ import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
 import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException;
 import maciej.grochowski.studentsidentities.exception.TooYoungException;
+import maciej.grochowski.studentsidentities.model.StudentPage;
 import maciej.grochowski.studentsidentities.repository.StudentRepository;
 import maciej.grochowski.studentsidentities.utils.StudentUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Getter
@@ -86,6 +92,11 @@ public class StudentService {
         return studentRepository.getAllStudentsByCriteria();
     }
 
+    public Page<Student> listAll(int pageNumber) {
+        Pageable pageable = PageRequest.of(pageNumber - 1, 4);
+        return studentRepository.findAll(pageable);
+    }
+
     public void sortByFirstName() {
         studentRepository.sortByFirstName();
     }
@@ -111,6 +122,11 @@ public class StudentService {
     }
 
     public void deleteStudentById(int id) {
+        Student studentByID = studentRepository.getStudentByID(id);
+        if (Objects.nonNull(studentByID)) {
+            List<Address> addressList = studentByID.getAddressList();
+            addressList.clear();
+        }
         studentRepository.deleteStudentById(id);
     }
 }
