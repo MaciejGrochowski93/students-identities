@@ -12,25 +12,15 @@
     <table border="2" class="table table-bordered" style="width: 80%">
         <thead>
         <tr>
-            <th><a th:href="@{/sortByFirstName}">First name</a></th>
-            <th><a th:href="@{/sortByMiddleName}">Middle name</a></th>
-            <th><a th:href="@{/sortByLastName}">Last name</a></th>
-            <th><a th:href="@{/sortByAge}">Date of birth</a></th>
+            <th><a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=firstName&sortDirection=' + ${reverseDirection}}">First name</a></th>
+            <th><a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=middleName&sortDirection=' + ${reverseDirection}}">Middle name</a></th>
+            <th><a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=lastName&sortDirection=' + ${reverseDirection}}">Last name</a></th>
+            <th><a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=dob&sortDirection=' + ${reverseDirection}}">Date of birth</a></th>
             <th>Pesel</th>
         </tr>
         </thead>
 
         <tbody>
-        <tr th:each="students : ${studentsList}">
-            <td th:text="${students.firstName}"></td>
-            <td th:text="${students.middleName}"></td>
-            <td th:text="${students.lastName}"></td>
-            <td th:text="${students.dob}"></td>
-            <td th:text="${students.pesel}"></td>
-            <td><a th:href="@{'/student/addresses/' + ${students.id}}" class="btn btn-success">Addresses</a></td>
-            <td><a th:href="@{'/student/updateStudent/' + ${students.id}}" class="btn btn-warning">Update</a></td>
-            <td><a th:href="@{'/student/deleteStudent/' + ${students.id}}" class="btn btn-danger">Delete</a></td>
-        </tr>
             <tr th:each="students : ${studentsListPage}">
                 <td th:text="${students.firstName}"></td>
                 <td th:text="${students.middleName}"></td>
@@ -46,7 +36,7 @@
         <div>
             Amount of students: [[${totalElements}]]. &nbsp; Page [[${currentPage}]] of [[${totalPages}]]. &nbsp;
             <span th:each="pageNr: ${#numbers.sequence(1, totalPages)}">
-                <a th:href="@{${pageNr}}">[[${pageNr}]]</a> &nbsp;
+                <th><a th:href="@{${pageNr} + '?sortBy=' ${sortBy} + '&sortDirection=' + ${sortDirection}}">[[${pageNr}]]</a> &nbsp;</th>
             </span>
         </div>
     <br>
@@ -54,14 +44,13 @@
 
     <br><br><br>
 
-    <form th:action="@{students/ageCount}" class="d-flex">
-
+    <form th:action="@{/student/students/ageCount}" class="d-flex">
         <input name="studentsOfAge" class="form-control mb-4 col-4" type="number"
                placeholder="Find amount of students of age:" min="18" max="100" required/>
         <button class="btn btn-primary" type="submit">Search</button>
     </form>
     <br>
-    <form th:action="@{students/cityCount}" class="d-flex" id="cityCount">
+    <form th:action="@{/student/students/cityCount}" class="d-flex" id="cityCount">
         <input name="studentsFromCity" class="form-control mb-4 col-4" type="text"
                placeholder="Find amount of students from City (not ready yet):" min="1" max="50" required/>
         <button class="btn btn-primary" type="submit">Search</button>

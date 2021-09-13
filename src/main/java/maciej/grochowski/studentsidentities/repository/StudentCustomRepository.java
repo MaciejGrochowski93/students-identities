@@ -11,19 +11,17 @@ import java.util.List;
 @Component
 public interface StudentCustomRepository {
 
-    List<Student> getAllStudentsByCriteria();
+//    List<Student> getAllStudentsByCriteria();
 
-    void sortByFirstName();
-
-    void sortByMiddleName();
-
-    void sortByLastName();
-
-    void sortByAge();
+//    void sortByFirstName();
+//
+//    void sortByMiddleName();
+//
+//    void sortByLastName();
+//
+//    void sortByAge();
 
     Long countStudentsOfAge(int age);
-
-//    Long getStudentsFromCity2(String city);
 
     Student getStudentByID(int id);
 
@@ -32,4 +30,10 @@ public interface StudentCustomRepository {
 
     @Transactional
     void deleteStudentById(int id);
+
+
+//    Long getStudentsFromCity2(String city);
+
+
+
 }

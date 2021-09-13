@@ -92,8 +92,11 @@ public class StudentService {
         return studentRepository.getAllStudentsByCriteria();
     }
 
-    public Page<Student> listAll(int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber - 1, 4);
+    public Page<Student> listAll(int pageNr, String sortBy, String sortDirection) {
+        Sort sort = Sort.by(sortBy).ascending();
+        sort = sortDirection.equals("asc") ? sort.ascending() : sort.descending();
+
+        Pageable pageable = PageRequest.of(pageNr - 1, 4, sort);
         return studentRepository.findAll(pageable);
     }
 

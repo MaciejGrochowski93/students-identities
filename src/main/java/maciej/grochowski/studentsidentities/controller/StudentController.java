@@ -13,6 +13,7 @@ import maciej.grochowski.studentsidentities.service.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,6 +31,33 @@ public class StudentController {
     private final AddressService addressService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
+
+    @GetMapping
+    public String getStudentsPage(Model model) {
+        return listByPage(model, 1, "firstName", "asc");
+    }
+
+    @GetMapping("/studentpage/{pageNr}")
+    public String listByPage(Model model,
+                             @PathVariable ("pageNr") int pageNr,
+                             @Param("sortBy") String sortBy,
+                             @Param("sortDirection") String sortDirection) {
+        Page<Student> studentsPage = studentService.listAll(pageNr, sortBy, sortDirection);
+        List<Student> studentsList = studentsPage.getContent();
+
+        int totalPages = studentsPage.getTotalPages();
+        long totalElements = studentsPage.getTotalElements();
+        String reverseDirection = sortDirection.equals("asc") ? "desc" : "asc";
+
+        model.addAttribute("studentsListPage", studentsList);
+        model.addAttribute("currentPage", pageNr);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalElements", totalElements);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("reverseDirection", reverseDirection);
+        return "index";
+    }
 
     @GetMapping("/addStudent")
     public String addStudentForm(Model model) {
@@ -60,7 +88,7 @@ public class StudentController {
             LOGGER.error(peselDateExc.getMessage());
             return "new_student";
         }
-        return "redirect:/";
+        return "redirect:/student";
     }
 
     @GetMapping("/addresses/{id}")
@@ -99,7 +127,7 @@ public class StudentController {
             return "update_student";
         }
 
-        return "redirect:/";
+        return "redirect:/student";
     }
 
     @GetMapping("/addresses/{id}/update")
@@ -121,32 +149,23 @@ public class StudentController {
             return "update_address";
         }
         addressService.updateAddressesOfStudentId(id, listTransfer);
-        return "redirect:/";
+        return "redirect:/student";
     }
 
     @GetMapping("/deleteStudent/{id}")
     public String deleteStudentById(@PathVariable int id) {
         studentService.deleteStudentById(id);
-        return "redirect:/";
+        return "redirect:/student";
     }
 
-    @GetMapping("/studentpage")
-    public String getStudentsPage(Model model) {
-        return listByPage(model, 1);
-    }
-
-    @GetMapping("/studentpage/{pageNr}")
-    public String listByPage(Model model, @PathVariable ("pageNr") int currentPageNr) {
-        Page<Student> studentsPage = studentService.listAll(currentPageNr);
-        List<Student> studentsList = studentsPage.getContent();
-
-        int totalPages = studentsPage.getTotalPages();
-        long totalElements = studentsPage.getTotalElements();
-
-        model.addAttribute("studentsListPage", studentsList);
-        model.addAttribute("currentPage", currentPageNr);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("totalElements", totalElements);
-        return "index";
+    @GetMapping("/students/ageCount")
+    public String countStudentsOfAge(@RequestParam("studentsOfAge") int age) {
+        Long amountStudentsOfAge = studentService.countStudentsOfAge(age);
+        if (amountStudentsOfAge > 0) {
+            LOGGER.info("We found {} student(s) of age {}.", amountStudentsOfAge, age);
+        } else {
+            LOGGER.warn("We haven't found any students of age {}.", age);
+        }
+        return "redirect:/student";
     }
 }
