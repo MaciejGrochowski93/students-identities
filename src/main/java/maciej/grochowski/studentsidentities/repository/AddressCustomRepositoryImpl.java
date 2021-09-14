@@ -160,6 +160,7 @@ public class AddressCustomRepositoryImpl implements AddressCustomRepository {
         Root<Address> root = delete.from(Address.class);
 
         delete.where(criteriaBuilder.equal(root.get(Address_.ID), id));
+
         this.entityManager.createQuery(delete).executeUpdate();
     }
 }

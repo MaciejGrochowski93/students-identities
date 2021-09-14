@@ -7,7 +7,6 @@ import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
 import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException;
 import maciej.grochowski.studentsidentities.exception.TooYoungException;
-import maciej.grochowski.studentsidentities.model.StudentPage;
 import maciej.grochowski.studentsidentities.service.AddressService;
 import maciej.grochowski.studentsidentities.service.StudentService;
 import org.slf4j.Logger;
@@ -39,7 +38,7 @@ public class StudentController {
 
     @GetMapping("/studentpage/{pageNr}")
     public String listByPage(Model model,
-                             @PathVariable ("pageNr") int pageNr,
+                             @PathVariable("pageNr") int pageNr,
                              @Param("sortBy") String sortBy,
                              @Param("sortDirection") String sortDirection) {
         Page<Student> studentsPage = studentService.listAll(pageNr, sortBy, sortDirection);

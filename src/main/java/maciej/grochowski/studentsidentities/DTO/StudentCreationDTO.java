@@ -16,21 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 public class StudentCreationDTO {
 
-    public StudentCreationDTO(String firstName, String lastName, String pesel, LocalDate dob) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.pesel = pesel;
-        this.dob = dob;
-    }
-
-    public StudentCreationDTO(String firstName, String middleName, String lastName, String pesel, LocalDate dob) {
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-        this.pesel = pesel;
-        this.dob = dob;
-    }
-
     @NotBlank(message = "")
     @Length(min = 1, max = 20, message = "Your first name must consist of 1 to 20 letters.")
     private String firstName;

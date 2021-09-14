@@ -8,9 +8,6 @@ import maciej.grochowski.studentsidentities.DTO.AddressListTransfer;
 import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
 import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
-import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException;
-import maciej.grochowski.studentsidentities.exception.TooYoungException;
-import maciej.grochowski.studentsidentities.model.StudentPage;
 import maciej.grochowski.studentsidentities.repository.StudentRepository;
 import maciej.grochowski.studentsidentities.utils.StudentUtils;
 import org.springframework.data.domain.Page;
@@ -48,9 +45,6 @@ public class StudentService {
         utils.validateAge(DTO);
 
         List<Address> addressList = addressService.createAddressListFromTransfer(addressTransfer);
-        if (DTO.getMiddleName().isEmpty()) {
-            return new Student(DTO.getFirstName(), DTO.getLastName(), DTO.getPesel(), DTO.getDob(), addressList);
-        }
         return new Student(DTO.getFirstName(), DTO.getMiddleName(), DTO.getLastName(), DTO.getPesel(), DTO.getDob(), addressList);
     }
 
@@ -88,32 +82,12 @@ public class StudentService {
         studentRepository.save(student);
     }
 
-    public List<Student> getAllStudentsCriteria() {
-        return studentRepository.getAllStudentsByCriteria();
-    }
-
     public Page<Student> listAll(int pageNr, String sortBy, String sortDirection) {
         Sort sort = Sort.by(sortBy).ascending();
         sort = sortDirection.equals("asc") ? sort.ascending() : sort.descending();
 
         Pageable pageable = PageRequest.of(pageNr - 1, 4, sort);
         return studentRepository.findAll(pageable);
-    }
-
-    public void sortByFirstName() {
-        studentRepository.sortByFirstName();
-    }
-
-    public void sortByMiddleName() {
-        studentRepository.sortByMiddleName();
-    }
-
-    public void sortByLastName() {
-        studentRepository.sortByLastName();
-    }
-
-    public void sortByAge() {
-        studentRepository.sortByAge();
     }
 
     public Long countStudentsOfAge(int age) {
@@ -129,8 +103,9 @@ public class StudentService {
         if (Objects.nonNull(studentByID)) {
             List<Address> addressList = studentByID.getAddressList();
             addressList.clear();
+            studentRepository.deleteStudentById(id);
         }
-        studentRepository.deleteStudentById(id);
     }
+
 }
 

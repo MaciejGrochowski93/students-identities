@@ -1,6 +1,8 @@
 package maciej.grochowski.studentsidentities.DTO;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
@@ -9,13 +11,6 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressCreationDTO {
-
-    public AddressCreationDTO(String street, String houseNr, String city, String postalCode) {
-        this.street = street;
-        this.houseNr = houseNr;
-        this.city = city;
-        this.postalCode = postalCode;
-    }
 
     private Integer id;
 

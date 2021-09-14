@@ -18,7 +18,7 @@ public class AddressListTransfer {
     public List<AddressCreationDTO> initListOfThreeAddressDTO() {
         if (addressDTOList == null) {
             addressDTOList = new ArrayList<>();
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < AddressType.values().length; i++) {
                 addressDTOList.add(new AddressCreationDTO());
             }
         }
