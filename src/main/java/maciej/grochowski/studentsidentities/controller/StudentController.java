@@ -48,12 +48,12 @@ public class StudentController {
         long totalElements = studentsPage.getTotalElements();
         String reverseDirection = sortDirection.equals("asc") ? "desc" : "asc";
 
-        model.addAttribute("studentsListPage", studentsList);
         model.addAttribute("currentPage", pageNr);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("totalElements", totalElements);
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("studentsListPage", studentsList);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalElements", totalElements);
         model.addAttribute("reverseDirection", reverseDirection);
         return "index";
     }
