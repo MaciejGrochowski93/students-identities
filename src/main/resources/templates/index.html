@@ -12,33 +12,41 @@
     <table border="2" class="table table-bordered" style="width: 80%">
         <thead>
         <tr>
-            <th><a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=firstName&sortDirection=' + ${reverseDirection}}">First name</a></th>
-            <th><a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=middleName&sortDirection=' + ${reverseDirection}}">Middle name</a></th>
-            <th><a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=lastName&sortDirection=' + ${reverseDirection}}">Last name</a></th>
-            <th><a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=dob&sortDirection=' + ${reverseDirection}}">Date of birth</a></th>
+            <th>
+                <a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=firstName&sortDirection=' + ${reverseDirection}}">First
+                    name</a></th>
+            <th>
+                <a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=middleName&sortDirection=' + ${reverseDirection}}">Middle
+                    name</a></th>
+            <th>
+                <a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=lastName&sortDirection=' + ${reverseDirection}}">Last
+                    name</a></th>
+            <th>
+                <a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=dob&sortDirection=' + ${reverseDirection}}">Date
+                    of birth</a></th>
             <th>Pesel</th>
         </tr>
         </thead>
 
         <tbody>
-            <tr th:each="students : ${studentsListPage}">
-                <td th:text="${students.firstName}"></td>
-                <td th:text="${students.middleName}"></td>
-                <td th:text="${students.lastName}"></td>
-                <td th:text="${students.dob}"></td>
-                <td th:text="${students.pesel}"></td>
-                <td><a th:href="@{'/student/addresses/' + ${students.id}}" class="btn btn-success">Addresses</a></td>
-                <td><a th:href="@{'/student/updateStudent/' + ${students.id}}" class="btn btn-warning">Update</a></td>
-                <td><a th:href="@{'/student/deleteStudent/' + ${students.id}}" class="btn btn-danger">Delete</a></td>
-            </tr>
+        <tr th:each="students : ${studentsListPage}">
+            <td th:text="${students.firstName}"></td>
+            <td th:text="${students.middleName}"></td>
+            <td th:text="${students.lastName}"></td>
+            <td th:text="${students.dob}"></td>
+            <td th:text="${students.pesel}"></td>
+            <td><a th:href="@{'/student/addresses/' + ${students.id}}" class="btn btn-success">Addresses</a></td>
+            <td><a th:href="@{'/student/updateStudent/' + ${students.id}}" class="btn btn-warning">Update</a></td>
+            <td><a th:href="@{'/student/deleteStudent/' + ${students.id}}" class="btn btn-danger">Delete</a></td>
+        </tr>
         </tbody>
     </table>
-        <div>
-            Amount of students: [[${totalElements}]]. &nbsp; Page [[${currentPage}]] of [[${totalPages}]]. &nbsp;
-            <span th:each="pageNr: ${#numbers.sequence(1, totalPages)}">
-                <th><a th:href="@{${pageNr} + '?sortBy=' ${sortBy} + '&sortDirection=' + ${sortDirection}}">[[${pageNr}]]</a> &nbsp;</th>
-            </span>
-        </div>
+    <div>
+        Amount of students: [[${totalElements}]]. &nbsp; Page [[${currentPage}]] of [[${totalPages}]]. &nbsp;
+        <span th:each="currentPage: ${#numbers.sequence(1, totalPages)}">
+                <a th:href="@{'/student/studentpage/' + ${currentPage} + '?sortBy=' + ${sortBy} + '&sortDirection=' + ${sortDirection}}">[[${currentPage}]]</a> &nbsp;
+        </span>
+    </div>
     <br>
     <td><a th:href="@{/student/addStudent}" class="btn btn-primary">Add Student</a></td>
 

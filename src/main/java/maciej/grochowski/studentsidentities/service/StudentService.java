@@ -100,18 +100,6 @@ public class StudentService {
         studentRepository.save(student);
     }
 
-    public Page<Student> listAll(int pageNr, String sortBy, String sortDirection) {
-        Sort sort = Sort.by(sortBy).ascending();
-        sort = sortDirection.equals("asc") ? sort.ascending() : sort.descending();
-
-        Pageable pageable = PageRequest.of(pageNr - 1, 4, sort);
-        return studentRepository.findAll(pageable);
-    }
-
-    public Long countStudentsOfAge(int age) {
-        return studentRepository.countStudentsOfAge(age);
-    }
-
     public Student getStudentById(int id) {
         return studentRepository.getStudentByID(id);
     }
@@ -123,6 +111,18 @@ public class StudentService {
             addressList.clear();
             studentRepository.deleteStudentById(id);
         }
+    }
+
+    public Page<Student> listAll(int pageNr, String sortBy, String sortDirection) {
+        Sort sort = Sort.by(sortBy).ascending();
+        sort = sortDirection.equals("asc") ? sort.ascending() : sort.descending();
+
+        Pageable pageable = PageRequest.of(pageNr - 1, 4, sort);
+        return studentRepository.findAll(pageable);
+    }
+
+    public Long countStudentsOfAge(int age) {
+        return studentRepository.countStudentsOfAge(age);
     }
 
     public String getStudentNames(int id) {

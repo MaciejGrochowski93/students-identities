@@ -36,9 +36,9 @@ public class StudentController {
         return listByPage(model, 1, "firstName", "asc");
     }
 
-    @GetMapping("/studentpage/{pageNr}")
+    @GetMapping("/studentpage/{currentPage}")
     public String listByPage(Model model,
-                             @PathVariable("pageNr") int pageNr,
+                             @PathVariable("currentPage") int pageNr,
                              @Param("sortBy") String sortBy,
                              @Param("sortDirection") String sortDirection) {
         Page<Student> studentsPage = studentService.listAll(pageNr, sortBy, sortDirection);
