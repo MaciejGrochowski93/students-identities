@@ -18,10 +18,6 @@ public class AddressService {
 
     private final AddressRepository addressRepository;
 
-    public List<Address> findAllAddresses() {
-        return addressRepository.findAll();
-    }
-
     public AddressListTransfer initListTransfer() {
         AddressListTransfer addressListTransfer = new AddressListTransfer();
         List<AddressCreationDTO> addressCreationDTOS = addressListTransfer.initListOfThreeAddressDTO();

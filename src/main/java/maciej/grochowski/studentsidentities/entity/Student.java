@@ -2,37 +2,20 @@ package maciej.grochowski.studentsidentities.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Student {
-
-    public Student(String firstName, String lastName, String pesel, LocalDate dob, List<Address> addressList) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.pesel = pesel;
-        this.dob = dob;
-        this.addressList = addressList;
-    }
-
-    public Student(String firstName, String middleName, String lastName, String pesel, LocalDate dob, List<Address> addressList) {
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-        this.pesel = pesel;
-        this.dob = dob;
-        this.addressList = addressList;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

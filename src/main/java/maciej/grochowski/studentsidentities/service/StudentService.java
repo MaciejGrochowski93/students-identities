@@ -45,14 +45,33 @@ public class StudentService {
         utils.validateAge(DTO);
 
         List<Address> addressList = addressService.createAddressListFromTransfer(addressTransfer);
-        return new Student(DTO.getFirstName(), DTO.getMiddleName(), DTO.getLastName(), DTO.getPesel(), DTO.getDob(), addressList);
+        return Student.builder()
+                .firstName(DTO.getFirstName())
+                .middleName(DTO.getFirstName())
+                .lastName(DTO.getLastName())
+                .dob(DTO.getDob())
+                .pesel(DTO.getPesel())
+                .addressList(addressList)
+                .build();
     }
 
     public StudentCreationDTO createDTOFromStudentId(int id) {
         Student student = getStudentById(id);
+        List<AddressCreationDTO> DTOList = rewriteStudentAddressesIntoDTOList(student);
+        return StudentCreationDTO.builder()
+                .firstName(student.getFirstName())
+                .middleName(student.getMiddleName())
+                .lastName(student.getLastName())
+                .dob(student.getDob())
+                .pesel(student.getPesel())
+                .addressDTOList(DTOList)
+                .build();
+    }
 
+    private List<AddressCreationDTO> rewriteStudentAddressesIntoDTOList(Student student) {
         List<Address> addressList = student.getAddressList();
         List<AddressCreationDTO> DTOList = new ArrayList<>();
+
         for (Address address : addressList) {
             AddressCreationDTO addressDTO = new AddressCreationDTO();
             addressDTO.setId(address.getId());
@@ -63,8 +82,7 @@ public class StudentService {
             addressDTO.setType(address.getType());
             DTOList.add(addressDTO);
         }
-        return new StudentCreationDTO(student.getFirstName(), student.getMiddleName(),
-                student.getLastName(), student.getPesel(), student.getDob(), DTOList);
+        return DTOList;
     }
 
     @Transactional
@@ -107,5 +125,9 @@ public class StudentService {
         }
     }
 
+    public String getStudentNames(int id) {
+        Student studentById = getStudentById(id);
+        return String.format(studentById.getFirstName(), " ", studentById.getLastName());
+    }
 }
 

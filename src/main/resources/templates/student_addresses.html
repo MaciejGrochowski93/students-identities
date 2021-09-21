@@ -12,24 +12,23 @@
 
     <table border="2" class="table table-bordered" style="width: 70%">
         <thead>
-            <th><a th:href="@{/sortByCity}">City </a></th>
-            <th><a th:href="@{/sortByStreet}">Street</a></th>
-            <th><a th:href="@{/sortByHouseNr}">House number</a></th>
-            <th><a th:href="@{/sortByPostalCode}">Postal code</a></th>
-            <th>Type</th>
+        <th><a th:href="@{/sortByCity}">City </a></th>
+        <th><a th:href="@{/sortByStreet}">Street</a></th>
+        <th><a th:href="@{/sortByHouseNr}">House number</a></th>
+        <th><a th:href="@{/sortByPostalCode}">Postal code</a></th>
+        <th>Type</th>
         </thead>
         <tbody>
-            <tr th:each="address : ${addressList}">
-                <td th:text="${address.city}"></td>
-                <td th:text="${address.street}"></td>
-                <td th:text="${address.houseNr}"></td>
-                <td th:text="${address.postalCode}"></td>
-                <td th:text="${address.type}"></td>
-<!--                <td><a th:href="@{'/student/deleteAddress/' + ${address.id}}" class="btn btn-danger">Delete address</a></td>-->
-            </tr>
+        <tr th:each="address : ${addressList}">
+            <td th:text="${address.city}"></td>
+            <td th:text="${address.street}"></td>
+            <td th:text="${address.houseNr}"></td>
+            <td th:text="${address.postalCode}"></td>
+            <td th:text="${address.type}"></td>
+        </tr>
         </tbody>
     </table>
-                <a th:href="@{'/student/addresses/' + ${id} + '/update'}">Update</a>
+    <a th:href="@{'/student/addresses/' + ${id} + '/update'}">Update</a>
 </div>
 </body>
 </html>

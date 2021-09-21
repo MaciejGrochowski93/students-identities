@@ -92,8 +92,7 @@ public class StudentController {
 
     @GetMapping("/addresses/{id}")
     public String findAddressesByStudentId(@PathVariable int id, Model model) {
-        Student studentById = studentService.getStudentById(id);
-        String studentName = String.format(studentById.getFirstName(), " ", studentById.getLastName());
+        String studentName = studentService.getStudentNames(id);
         List<Address> addressList = addressService.findAddressesByStudentId(id);
         model.addAttribute("studentName", studentName);
         model.addAttribute("addressList", addressList);
@@ -131,11 +130,8 @@ public class StudentController {
 
     @GetMapping("/addresses/{id}/update")
     public String updateAddress(@PathVariable int id, Model model) {
+        String studentName = studentService.getStudentNames(id);
         AddressListTransfer addressListTransfer = addressService.createListTransferFromStudent(id);
-
-        Student studentById = studentService.getStudentById(id);
-        String studentName = String.format(studentById.getFirstName(), " ", studentById.getLastName());
-
         model.addAttribute("studentName", studentName);
         model.addAttribute("addressListTransfer", addressListTransfer);
         return "update_address";
