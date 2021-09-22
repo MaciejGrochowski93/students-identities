@@ -13,16 +13,16 @@
         <thead>
         <tr>
             <th>
-                <a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=firstName&sortDirection=' + ${reverseDirection}}">First
+                <a th:href="@{'/student/studentpage/' + ${currentPage} + '?sortBy=firstName&sortDirection=' + ${reverseDirection}}">First
                     name</a></th>
             <th>
-                <a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=middleName&sortDirection=' + ${reverseDirection}}">Middle
+                <a th:href="@{'/student/studentpage/' + ${currentPage} + '?sortBy=middleName&sortDirection=' + ${reverseDirection}}">Middle
                     name</a></th>
             <th>
-                <a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=lastName&sortDirection=' + ${reverseDirection}}">Last
+                <a th:href="@{'/student/studentpage/' + ${currentPage} + '?sortBy=lastName&sortDirection=' + ${reverseDirection}}">Last
                     name</a></th>
             <th>
-                <a th:href="@{'/student/studentpage/' + ${pageNr} + '?sortBy=dob&sortDirection=' + ${reverseDirection}}">Date
+                <a th:href="@{'/student/studentpage/' + ${currentPage} + '?sortBy=dob&sortDirection=' + ${reverseDirection}}">Date
                     of birth</a></th>
             <th>Pesel</th>
         </tr>

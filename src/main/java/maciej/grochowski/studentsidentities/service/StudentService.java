@@ -113,7 +113,7 @@ public class StudentService {
         }
     }
 
-    public Page<Student> listAll(int pageNr, String sortBy, String sortDirection) {
+    public Page<Student> listAllStudents(int pageNr, String sortBy, String sortDirection) {
         Sort sort = Sort.by(sortBy).ascending();
         sort = sortDirection.equals("asc") ? sort.ascending() : sort.descending();
 

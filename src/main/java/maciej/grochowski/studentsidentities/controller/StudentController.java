@@ -41,7 +41,7 @@ public class StudentController {
                              @PathVariable("currentPage") int pageNr,
                              @Param("sortBy") String sortBy,
                              @Param("sortDirection") String sortDirection) {
-        Page<Student> studentsPage = studentService.listAll(pageNr, sortBy, sortDirection);
+        Page<Student> studentsPage = studentService.listAllStudents(pageNr, sortBy, sortDirection);
         List<Student> studentsList = studentsPage.getContent();
 
         int totalPages = studentsPage.getTotalPages();
