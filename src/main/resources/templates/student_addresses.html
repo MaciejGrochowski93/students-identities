@@ -12,14 +12,21 @@
 
     <table border="2" class="table table-bordered" style="width: 70%">
         <thead>
-        <th><a th:href="@{/sortByCity}">City </a></th>
-        <th><a th:href="@{/sortByStreet}">Street</a></th>
-        <th><a th:href="@{/sortByHouseNr}">House number</a></th>
-        <th><a th:href="@{/sortByPostalCode}">Postal code</a></th>
+        <th><a th:href="@{'/student/addresses/' + ${id} + '/addressPage/' + ${currentPage}
+        + '?sortBy=city&sortDirection=' + ${reverseDirection}}">City </a></th>
+
+        <th><a th:href="@{'/student/addresses/' + ${id} + '/addressPage/' + ${currentPage}
+        + '?sortBy=street&sortDirection=' + ${reverseDirection}}">Street</a></th>
+
+        <th><a th:href="@{'/student/addresses/' + ${id} + '/addressPage/' + ${currentPage}
+         + '?sortBy=houseNr&sortDirection=' + ${reverseDirection}}">House number</a></th>
+
+        <th><a th:href="@{'/student/addresses/' + ${id} + '/addressPage/' + ${currentPage}
+        + '?sortBy=postalCode&sortDirection=' + ${reverseDirection}}">Postal code</a></th>
         <th>Type</th>
         </thead>
         <tbody>
-        <tr th:each="address : ${addressList}">
+        <tr th:each="address : ${listPage}">
             <td th:text="${address.city}"></td>
             <td th:text="${address.street}"></td>
             <td th:text="${address.houseNr}"></td>

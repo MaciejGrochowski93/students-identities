@@ -20,13 +20,5 @@ public interface AddressCustomRepository {
 
     List<Address> getAddressByCity(String city);
 
-    void sortByCity();
-
-    void sortByStreet();
-
-    void sortByHouseNr();
-
-    void sortByPostalCode();
-
     Long countStudentsFromCity(String city);
 }

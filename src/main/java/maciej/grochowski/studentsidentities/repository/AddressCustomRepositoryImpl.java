@@ -19,9 +19,6 @@ public class AddressCustomRepositoryImpl implements AddressCustomRepository {
     private EntityManager entityManager;
 
     private Sort.Direction sortDirection = Sort.Direction.ASC;
-    private String criteriaWord;
-    private int number = 1;
-
 
     @Override
     public List<Address> findAddressesByStudentId(int studentId) {
@@ -32,69 +29,13 @@ public class AddressCustomRepositoryImpl implements AddressCustomRepository {
         Predicate idPredicate = criteriaBuilder.equal(address.get(Address_.STUDENT), studentId);
         criteriaQuery.where(idPredicate);
 
-        setCriteriaWord();
+        String criteriaWord = "city";
         if (sortDirection.isAscending()) {
             criteriaQuery.orderBy(criteriaBuilder.asc(address.get(criteriaWord)));
         } else {
             criteriaQuery.orderBy(criteriaBuilder.desc(address.get(criteriaWord)));
         }
         return entityManager.createQuery(criteriaQuery).getResultList();
-    }
-
-    private void setCriteriaWord() {
-        switch (number) {
-            case 2:
-                criteriaWord = "street";
-                break;
-            case 3:
-                criteriaWord = "houseNr";
-                break;
-            case 4:
-                criteriaWord = "postalCode";
-                break;
-            default:
-                criteriaWord = "city";
-        }
-    }
-
-    @Override
-    public void sortByCity() {
-        number = 1;
-        if (sortDirection.isAscending()) {
-            sortDirection = Sort.Direction.DESC;
-        } else {
-            sortDirection = Sort.Direction.ASC;
-        }
-    }
-
-    @Override
-    public void sortByStreet() {
-        number = 2;
-        if (sortDirection.isAscending()) {
-            sortDirection = Sort.Direction.DESC;
-        } else {
-            sortDirection = Sort.Direction.ASC;
-        }
-    }
-
-    @Override
-    public void sortByHouseNr() {
-        number = 3;
-        if (sortDirection.isAscending()) {
-            sortDirection = Sort.Direction.DESC;
-        } else {
-            sortDirection = Sort.Direction.ASC;
-        }
-    }
-
-    @Override
-    public void sortByPostalCode() {
-        number = 4;
-        if (sortDirection.isAscending()) {
-            sortDirection = Sort.Direction.DESC;
-        } else {
-            sortDirection = Sort.Direction.ASC;
-        }
     }
 
     @Override

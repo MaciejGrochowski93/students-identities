@@ -9,6 +9,7 @@ import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException
 import maciej.grochowski.studentsidentities.exception.TooYoungException;
 import maciej.grochowski.studentsidentities.service.AddressService;
 import maciej.grochowski.studentsidentities.service.StudentService;
+import maciej.grochowski.studentsidentities.utils.StudentUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -28,33 +29,24 @@ public class StudentController {
 
     private final StudentService studentService;
     private final AddressService addressService;
+    private final StudentUtils utils;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
 
     @GetMapping
     public String getStudentsPage(Model model) {
-        return listByPage(model, 1, "firstName", "asc");
+        return studentsListByPage(model, 1, "firstName", "asc");
     }
 
     @GetMapping("/studentpage/{currentPage}")
-    public String listByPage(Model model,
-                             @PathVariable("currentPage") int pageNr,
-                             @Param("sortBy") String sortBy,
-                             @Param("sortDirection") String sortDirection) {
+    public String studentsListByPage(Model model,
+                                     @PathVariable("currentPage") int pageNr,
+                                     @Param("sortBy") String sortBy,
+                                     @Param("sortDirection") String sortDirection) {
         Page<Student> studentsPage = studentService.listAllStudents(pageNr, sortBy, sortDirection);
-        List<Student> studentsList = studentsPage.getContent();
 
-        int totalPages = studentsPage.getTotalPages();
-        long totalElements = studentsPage.getTotalElements();
-        String reverseDirection = sortDirection.equals("asc") ? "desc" : "asc";
-
-        model.addAttribute("currentPage", pageNr);
-        model.addAttribute("sortBy", sortBy);
-        model.addAttribute("sortDirection", sortDirection);
-        model.addAttribute("studentsListPage", studentsList);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("totalElements", totalElements);
-        model.addAttribute("reverseDirection", reverseDirection);
+        utils.addSortingAttributesToModel(model, pageNr, sortBy, sortDirection);
+        utils.addPagingAttributesToModel(model, studentsPage);
         return "index";
     }
 
@@ -91,12 +83,45 @@ public class StudentController {
     }
 
     @GetMapping("/addresses/{id}")
-    public String findAddressesByStudentId(@PathVariable int id, Model model) {
+    public String getAddressesPage(Model model, @PathVariable int id) {
+        return addressListByPage(model, id, 1, "city", "asc");
+    }
+
+    @GetMapping("/addresses/{id}/addressPage/{currentPage}")
+    public String addressListByPage(Model model,
+                                    @PathVariable("id") int id,
+                                    @PathVariable("currentPage") int pageNr,
+                                    @Param("sortBy") String sortBy,
+                                    @Param("sortDirection") String sortDirection) {
+        Page<Address> addressPage = addressService.listAddressesByStudentID(id, pageNr, sortBy, sortDirection);
+        List<Address> listPage = addressPage.getContent();
+
+        utils.addSortingAttributesToModel(model, pageNr, sortBy, sortDirection);
+        utils.addPagingAttributesToModel(model, addressPage);
         String studentName = studentService.getStudentNames(id);
-        List<Address> addressList = addressService.findAddressesByStudentId(id);
         model.addAttribute("studentName", studentName);
-        model.addAttribute("addressList", addressList);
+        model.addAttribute("listPage", listPage);
+
         return "student_addresses";
+    }
+
+    @GetMapping("/addresses/{id}/update")
+    public String updateAddress(@PathVariable int id, Model model) {
+        String studentName = studentService.getStudentNames(id);
+        AddressListTransfer addressListTransfer = addressService.createListTransferFromStudent(id);
+        model.addAttribute("studentName", studentName);
+        model.addAttribute("addressListTransfer", addressListTransfer);
+        return "update_address";
+    }
+
+    @PostMapping("/addresses/{id}/update")
+    public String updateAddress(@ModelAttribute("addressListTransfer") @Valid AddressListTransfer listTransfer,
+                                BindingResult addressResult, Model model, @PathVariable int id) {
+        if (addressResult.hasErrors()) {
+            return "update_address";
+        }
+        addressService.updateAddressesOfStudentId(id, listTransfer);
+        return "redirect:/student";
     }
 
     @GetMapping("/updateStudent/{id}")
@@ -125,25 +150,6 @@ public class StudentController {
             return "update_student";
         }
 
-        return "redirect:/student";
-    }
-
-    @GetMapping("/addresses/{id}/update")
-    public String updateAddress(@PathVariable int id, Model model) {
-        String studentName = studentService.getStudentNames(id);
-        AddressListTransfer addressListTransfer = addressService.createListTransferFromStudent(id);
-        model.addAttribute("studentName", studentName);
-        model.addAttribute("addressListTransfer", addressListTransfer);
-        return "update_address";
-    }
-
-    @PostMapping("/addresses/{id}/update")
-    public String updateAddress(@ModelAttribute("addressListTransfer") @Valid AddressListTransfer listTransfer,
-                                BindingResult addressResult, Model model, @PathVariable int id) {
-        if (addressResult.hasErrors()) {
-            return "update_address";
-        }
-        addressService.updateAddressesOfStudentId(id, listTransfer);
         return "redirect:/student";
     }
 

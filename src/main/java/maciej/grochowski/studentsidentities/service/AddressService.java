@@ -6,6 +6,9 @@ import maciej.grochowski.studentsidentities.DTO.AddressListTransfer;
 import maciej.grochowski.studentsidentities.DTO.AddressType;
 import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.repository.AddressRepository;
+import maciej.grochowski.studentsidentities.utils.StudentUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
@@ -17,6 +20,7 @@ import java.util.List;
 public class AddressService {
 
     private final AddressRepository addressRepository;
+    private final StudentUtils utils;
 
     public AddressListTransfer initListTransfer() {
         AddressListTransfer addressListTransfer = new AddressListTransfer();
@@ -78,6 +82,11 @@ public class AddressService {
         addressList.get(2).setType(AddressType.CORRESPONDENCE);
     }
 
+    public Page<Address> listAddressesByStudentID(int id, int pageNr, String sortBy, String sortDirection) {
+        Pageable pageable = utils.listAllElements(pageNr, sortBy, sortDirection);
+        return addressRepository.findAllByStudentId(id, pageable);
+    }
+
     public Long countStudentsFromCity(String city) {
         return addressRepository.countStudentsFromCity(city);
     }
@@ -88,22 +97,6 @@ public class AddressService {
 
     public List<Address> findAddressesByStudentId(int id) {
         return addressRepository.findAddressesByStudentId(id);
-    }
-
-    public void sortByCity() {
-        addressRepository.sortByCity();
-    }
-
-    public void sortByStreet() {
-        addressRepository.sortByStreet();
-    }
-
-    public void sortByHouseNr() {
-        addressRepository.sortByHouseNr();
-    }
-
-    public void sortByPostalCode() {
-        addressRepository.sortByPostalCode();
     }
 
     public void deleteAddressById(int id) {

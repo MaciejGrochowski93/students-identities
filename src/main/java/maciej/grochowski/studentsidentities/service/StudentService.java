@@ -11,9 +11,7 @@ import maciej.grochowski.studentsidentities.entity.Student;
 import maciej.grochowski.studentsidentities.repository.StudentRepository;
 import maciej.grochowski.studentsidentities.utils.StudentUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -114,10 +112,7 @@ public class StudentService {
     }
 
     public Page<Student> listAllStudents(int pageNr, String sortBy, String sortDirection) {
-        Sort sort = Sort.by(sortBy).ascending();
-        sort = sortDirection.equals("asc") ? sort.ascending() : sort.descending();
-
-        Pageable pageable = PageRequest.of(pageNr - 1, 4, sort);
+        Pageable pageable = utils.listAllElements(pageNr, sortBy, sortDirection);
         return studentRepository.findAll(pageable);
     }
 
