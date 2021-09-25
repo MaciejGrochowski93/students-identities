@@ -9,7 +9,7 @@ import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
 import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
 import maciej.grochowski.studentsidentities.repository.StudentRepository;
-import maciej.grochowski.studentsidentities.utils.StudentUtils;
+import maciej.grochowski.studentsidentities.utils.Utils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final AddressService addressService;
-    private final StudentUtils utils;
+    private final Utils utils;
 
     public void addStudent(StudentCreationDTO studentDTOForm, AddressListTransfer addressTransfer) {
         Student student = createStudentFromDTO(studentDTOForm, addressTransfer);

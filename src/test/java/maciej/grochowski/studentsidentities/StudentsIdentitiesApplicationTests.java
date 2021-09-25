@@ -3,7 +3,7 @@ package maciej.grochowski.studentsidentities;
 import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
 import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException;
 import maciej.grochowski.studentsidentities.exception.TooYoungException;
-import maciej.grochowski.studentsidentities.utils.StudentUtils;
+import maciej.grochowski.studentsidentities.utils.Utils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class StudentsIdentitiesApplicationTests {
 
-    StudentUtils utils;
+    Utils utils;
     TestInfo testInfo;
     TestReporter testReporter;
     StudentCreationDTO DTO;
@@ -31,7 +31,7 @@ class StudentsIdentitiesApplicationTests {
     void init(TestInfo testInfo, TestReporter testReporter) {
         this.testInfo = testInfo;
         this.testReporter = testReporter;
-        utils = new StudentUtils();
+        utils = new Utils();
         DTO = new StudentCreationDTO();
     }
 

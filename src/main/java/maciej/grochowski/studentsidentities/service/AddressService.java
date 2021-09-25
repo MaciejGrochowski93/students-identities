@@ -6,7 +6,7 @@ import maciej.grochowski.studentsidentities.DTO.AddressListTransfer;
 import maciej.grochowski.studentsidentities.DTO.AddressType;
 import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.repository.AddressRepository;
-import maciej.grochowski.studentsidentities.utils.StudentUtils;
+import maciej.grochowski.studentsidentities.utils.Utils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.List;
 public class AddressService {
 
     private final AddressRepository addressRepository;
-    private final StudentUtils utils;
+    private final Utils utils;
 
     public AddressListTransfer initListTransfer() {
         AddressListTransfer addressListTransfer = new AddressListTransfer();

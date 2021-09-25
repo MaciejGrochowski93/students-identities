@@ -1,24 +1,20 @@
 package maciej.grochowski.studentsidentities.utils;
 
 import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
-import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException;
 import maciej.grochowski.studentsidentities.exception.TooYoungException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.List;
 import java.util.Optional;
 
 @Component
-public class StudentUtils {
+public class Utils {
 
     public void validateAge(StudentCreationDTO DTO) throws TooYoungException {
         LocalDate studentBirthday = DTO.getDob();
@@ -78,22 +74,5 @@ public class StudentUtils {
         sort = sortDirection.equals("asc") ? sort.ascending() : sort.descending();
 
         return PageRequest.of(pageNr - 1, 4, sort);
-    }
-
-    public void addSortingAttributesToModel(Model model, int pageNr, String sortBy, String sortDirection) {
-        String reverseDirection = sortDirection.equals("asc") ? "desc" : "asc";
-        model.addAttribute("currentPage", pageNr);
-        model.addAttribute("sortBy", sortBy);
-        model.addAttribute("sortDirection", sortDirection);
-        model.addAttribute("reverseDirection", reverseDirection);
-    }
-
-    public void addPagingAttributesToModel(Model model, Page page) {
-        List list = page.getContent();
-        int totalPages = page.getTotalPages();
-        long totalElements = page.getTotalElements();
-        model.addAttribute("listPage", list);
-        model.addAttribute("totalPages", totalPages);
-        model.addAttribute("totalElements", totalElements);
     }
 }

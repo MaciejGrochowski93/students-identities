@@ -5,11 +5,9 @@ import maciej.grochowski.studentsidentities.DTO.AddressListTransfer;
 import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
 import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
-import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException;
-import maciej.grochowski.studentsidentities.exception.TooYoungException;
 import maciej.grochowski.studentsidentities.service.AddressService;
+import maciej.grochowski.studentsidentities.service.ModelService;
 import maciej.grochowski.studentsidentities.service.StudentService;
-import maciej.grochowski.studentsidentities.utils.StudentUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -20,7 +18,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @AllArgsConstructor
 @Controller
@@ -29,7 +26,7 @@ public class StudentController {
 
     private final StudentService studentService;
     private final AddressService addressService;
-    private final StudentUtils utils;
+    private final ModelService modelService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
 
@@ -43,19 +40,19 @@ public class StudentController {
                                      @PathVariable("currentPage") int pageNr,
                                      @Param("sortBy") String sortBy,
                                      @Param("sortDirection") String sortDirection) {
-        Page<Student> studentsPage = studentService.listAllStudents(pageNr, sortBy, sortDirection);
 
-        utils.addSortingAttributesToModel(model, pageNr, sortBy, sortDirection);
-        utils.addPagingAttributesToModel(model, studentsPage);
+        Page<Student> studentsPage = studentService.listAllStudents(pageNr, sortBy, sortDirection);
+        modelService.addSortingAttributesToModel(model, pageNr, sortBy, sortDirection);
+        modelService.addPagingAttributesToModel(model, studentsPage);
         return "index";
     }
 
     @GetMapping("/addStudent")
     public String addStudentForm(Model model) {
-        AddressListTransfer addressListTransfer = addressService.initListTransfer();
 
-        model.addAttribute("studentDTOForm", new StudentCreationDTO());
+        AddressListTransfer addressListTransfer = addressService.initListTransfer();
         model.addAttribute("addressListForm", addressListTransfer);
+        model.addAttribute("studentDTOForm", new StudentCreationDTO());
         return "new_student";
     }
 
@@ -68,17 +65,7 @@ public class StudentController {
         if (studentResult.hasErrors() || addressResult.hasErrors()) {
             return "new_student";
         }
-        try {
-            studentService.addStudent(studentDTOForm, addressTransfer);
-        } catch (TooYoungException youthExc) {
-            model.addAttribute("youthExc", youthExc.getMessage());
-            LOGGER.error(youthExc.getMessage());
-            return "new_student";
-        } catch (PeselDateNotMatchException peselDateExc) {
-            model.addAttribute("peselDateExc", peselDateExc.getMessage());
-            LOGGER.error(peselDateExc.getMessage());
-            return "new_student";
-        }
+        modelService.addStudentCreationAttributesToModel(studentDTOForm, addressTransfer, model);
         return "redirect:/student";
     }
 
@@ -93,24 +80,20 @@ public class StudentController {
                                     @PathVariable("currentPage") int pageNr,
                                     @Param("sortBy") String sortBy,
                                     @Param("sortDirection") String sortDirection) {
-        Page<Address> addressPage = addressService.listAddressesByStudentID(id, pageNr, sortBy, sortDirection);
-        List<Address> listPage = addressPage.getContent();
 
-        utils.addSortingAttributesToModel(model, pageNr, sortBy, sortDirection);
-        utils.addPagingAttributesToModel(model, addressPage);
-        String studentName = studentService.getStudentNames(id);
-        model.addAttribute("studentName", studentName);
-        model.addAttribute("listPage", listPage);
+        Page<Address> addressPage = addressService.listAddressesByStudentID(id, pageNr, sortBy, sortDirection);
+        modelService.addSortingAttributesToModel(model, pageNr, sortBy, sortDirection);
+        modelService.addPagingAttributesToModel(model, addressPage);
+        modelService.addStudentsNameToModel(model, id);
 
         return "student_addresses";
     }
 
     @GetMapping("/addresses/{id}/update")
     public String updateAddress(@PathVariable int id, Model model) {
-        String studentName = studentService.getStudentNames(id);
         AddressListTransfer addressListTransfer = addressService.createListTransferFromStudent(id);
-        model.addAttribute("studentName", studentName);
         model.addAttribute("addressListTransfer", addressListTransfer);
+        modelService.addStudentsNameToModel(model, id);
         return "update_address";
     }
 
@@ -138,18 +121,7 @@ public class StudentController {
             return "update_student";
         }
 
-        try {
-            studentService.updateStudent(id, studentDTO);
-        } catch (TooYoungException youthExc) {
-            model.addAttribute("youthExc", youthExc.getMessage());
-            LOGGER.error(youthExc.getMessage());
-            return "update_student";
-        } catch (PeselDateNotMatchException peselDateExc) {
-            model.addAttribute("peselDateExc", peselDateExc.getMessage());
-            LOGGER.error(peselDateExc.getMessage());
-            return "update_student";
-        }
-
+        modelService.addStudentUpdateAttributesToModel(studentDTO, id, model);
         return "redirect:/student";
     }
 
