@@ -5,23 +5,18 @@ import maciej.grochowski.studentsidentities.entity.Address_;
 import maciej.grochowski.studentsidentities.entity.Student;
 import maciej.grochowski.studentsidentities.entity.Student_;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.List;
 
 @NoArgsConstructor
 public class StudentCustomRepositoryImpl implements StudentCustomRepository {
 
     @Autowired
     private EntityManager entityManager;
-    private Sort.Direction sortDirection = Sort.Direction.ASC;
-    private String criteriaSearchWord;
-    private int criteriaSortNumber = 1;
 
     @Override
     public Student getStudentByID(int id) {
@@ -34,20 +29,6 @@ public class StudentCustomRepositoryImpl implements StudentCustomRepository {
         criteriaQuery.where(idPredicate);
 
         return entityManager.createQuery(criteriaQuery).getSingleResult();
-    }
-
-    @Override
-    @Transactional
-    public void updateFirstName(int id, String firstNameUpdated) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-
-        CriteriaUpdate<Student> update = criteriaBuilder.createCriteriaUpdate(Student.class);
-        Root root = update.from(Student.class);
-
-        update.set(Student_.firstName, firstNameUpdated);
-        update.where(criteriaBuilder.equal(root.get(Address_.ID), id));
-
-        this.entityManager.createQuery(update).executeUpdate();
     }
 
     @Override

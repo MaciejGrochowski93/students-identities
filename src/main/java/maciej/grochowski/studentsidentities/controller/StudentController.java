@@ -1,5 +1,6 @@
 package maciej.grochowski.studentsidentities.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import maciej.grochowski.studentsidentities.DTO.AddressListTransfer;
 import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
@@ -30,11 +31,13 @@ public class StudentController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
 
+    @ApiOperation(value = "Displays all Students from the database.")
     @GetMapping
     public String getStudentsPage(Model model) {
         return studentsListByPage(model, 1, "firstName", "asc");
     }
 
+    @ApiOperation(value = "Displays all Students from the database, and allows you to sort them by parameters.")
     @GetMapping("/studentpage/{currentPage}")
     public String studentsListByPage(Model model,
                                      @PathVariable("currentPage") int pageNr,
@@ -47,6 +50,7 @@ public class StudentController {
         return "index";
     }
 
+    @ApiOperation(value = "Allows you to create new Student, and it's Addresses.")
     @GetMapping("/addStudent")
     public String addStudentForm(Model model) {
 
@@ -69,44 +73,7 @@ public class StudentController {
         return "redirect:/student";
     }
 
-    @GetMapping("/addresses/{id}")
-    public String getAddressesPage(Model model, @PathVariable int id) {
-        return addressListByPage(model, id, 1, "city", "asc");
-    }
-
-    @GetMapping("/addresses/{id}/addressPage/{currentPage}")
-    public String addressListByPage(Model model,
-                                    @PathVariable("id") int id,
-                                    @PathVariable("currentPage") int pageNr,
-                                    @Param("sortBy") String sortBy,
-                                    @Param("sortDirection") String sortDirection) {
-
-        Page<Address> addressPage = addressService.listAddressesByStudentID(id, pageNr, sortBy, sortDirection);
-        modelService.addSortingAttributesToModel(model, pageNr, sortBy, sortDirection);
-        modelService.addPagingAttributesToModel(model, addressPage);
-        modelService.addStudentsNameToModel(model, id);
-
-        return "student_addresses";
-    }
-
-    @GetMapping("/addresses/{id}/update")
-    public String updateAddress(@PathVariable int id, Model model) {
-        AddressListTransfer addressListTransfer = addressService.createListTransferFromStudent(id);
-        model.addAttribute("addressListTransfer", addressListTransfer);
-        modelService.addStudentsNameToModel(model, id);
-        return "update_address";
-    }
-
-    @PostMapping("/addresses/{id}/update")
-    public String updateAddress(@ModelAttribute("addressListTransfer") @Valid AddressListTransfer listTransfer,
-                                BindingResult addressResult, Model model, @PathVariable int id) {
-        if (addressResult.hasErrors()) {
-            return "update_address";
-        }
-        addressService.updateAddressesOfStudentId(id, listTransfer);
-        return "redirect:/student";
-    }
-
+    @ApiOperation(value = "Allows you to update Student's identities.")
     @GetMapping("/updateStudent/{id}")
     public String updateStudent(@PathVariable int id, Model model) {
         StudentCreationDTO createdDTO = studentService.createDTOFromStudentId(id);
@@ -125,12 +92,14 @@ public class StudentController {
         return "redirect:/student";
     }
 
+    @ApiOperation(value = "Removes Student, and his Addresses from the database.")
     @GetMapping("/deleteStudent/{id}")
     public String deleteStudentById(@PathVariable int id) {
         studentService.deleteStudentById(id);
         return "redirect:/student";
     }
 
+    @ApiOperation(value = "Displays amount of Students by the given age.")
     @GetMapping("/students/ageCount")
     public String countStudentsOfAge(@RequestParam("studentsOfAge") int age) {
         Long amountStudentsOfAge = studentService.countStudentsOfAge(age);
@@ -139,6 +108,47 @@ public class StudentController {
         } else {
             LOGGER.warn("We haven't found any students of age {}.", age);
         }
+        return "redirect:/student";
+    }
+
+    @ApiOperation(value = "Shows Addresses of a particular Student by it's ID.")
+    @GetMapping("/addresses/{id}")
+    public String getAddressesPage(Model model, @PathVariable int id) {
+        return addressListByPage(model, id, 1, "city", "asc");
+    }
+
+    @ApiOperation(value = "Shows Addresses of a particular Student by it's ID, and allows you to sort them by parameters.")
+    @GetMapping("/addresses/{id}/addressPage/{currentPage}")
+    public String addressListByPage(Model model,
+                                    @PathVariable("id") int id,
+                                    @PathVariable("currentPage") int pageNr,
+                                    @Param("sortBy") String sortBy,
+                                    @Param("sortDirection") String sortDirection) {
+
+        Page<Address> addressPage = addressService.listAddressesByStudentID(id, pageNr, sortBy, sortDirection);
+        modelService.addSortingAttributesToModel(model, pageNr, sortBy, sortDirection);
+        modelService.addPagingAttributesToModel(model, addressPage);
+        modelService.addStudentsNameToModel(model, id);
+
+        return "student_addresses";
+    }
+
+    @ApiOperation(value = "Allows you to update Student's Addresses.")
+    @GetMapping("/addresses/{id}/update")
+    public String updateAddress(@PathVariable int id, Model model) {
+        AddressListTransfer addressListTransfer = addressService.createListTransferFromStudent(id);
+        model.addAttribute("addressListTransfer", addressListTransfer);
+        modelService.addStudentsNameToModel(model, id);
+        return "update_address";
+    }
+
+    @PostMapping("/addresses/{id}/update")
+    public String updateAddress(@ModelAttribute("addressListTransfer") @Valid AddressListTransfer listTransfer,
+                                BindingResult addressResult, @PathVariable int id) {
+        if (addressResult.hasErrors()) {
+            return "update_address";
+        }
+        addressService.updateAddressesOfStudentId(id, listTransfer);
         return "redirect:/student";
     }
 }

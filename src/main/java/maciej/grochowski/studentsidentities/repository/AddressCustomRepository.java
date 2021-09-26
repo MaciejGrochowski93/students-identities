@@ -19,6 +19,4 @@ public interface AddressCustomRepository {
     void deleteAddressById(int id);
 
     List<Address> getAddressByCity(String city);
-
-    Long countStudentsFromCity(String city);
 }

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -36,20 +35,6 @@ public class AddressCustomRepositoryImpl implements AddressCustomRepository {
             criteriaQuery.orderBy(criteriaBuilder.desc(address.get(criteriaWord)));
         }
         return entityManager.createQuery(criteriaQuery).getResultList();
-    }
-
-    @Override
-    public Long countStudentsFromCity(String city) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-
-        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
-        Root<Address> addressRoot = criteriaQuery.from(Address.class);
-
-        Predicate cityPredicate = criteriaBuilder.like(addressRoot.get(Address_.CITY), city);
-        criteriaQuery.select(criteriaBuilder.count(addressRoot)).where(cityPredicate);
-
-        TypedQuery<Long> typedQuery = entityManager.createQuery(criteriaQuery);
-        return typedQuery.getSingleResult();
     }
 
     @Override

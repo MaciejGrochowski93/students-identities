@@ -16,8 +16,5 @@ public interface StudentCustomRepository {
     Student getStudentByID(int id);
 
     @Transactional
-    void updateFirstName(int id, String firstNameUpdated);
-
-    @Transactional
     void deleteStudentById(int id);
 }

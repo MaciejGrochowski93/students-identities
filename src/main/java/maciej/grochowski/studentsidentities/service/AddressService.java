@@ -87,10 +87,6 @@ public class AddressService {
         return addressRepository.findAllByStudentId(id, pageable);
     }
 
-    public Long countStudentsFromCity(String city) {
-        return addressRepository.countStudentsFromCity(city);
-    }
-
     public List<Address> getAddressByCity(String city) {
         return addressRepository.getAddressByCity(city);
     }
