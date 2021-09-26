@@ -53,12 +53,12 @@ public class Utils {
     public String getSixPeselLettersFromDOB(StudentCreationDTO DTO) {
         LocalDate studentDob = DTO.getDob();
         String dateString = studentDob.toString();
-        int decadeOfBirthPosition = 2;
-        int dayOfBirthPosition = 10;
+        int decadeOfBirthPeselPosition = 2;
+        int dayOfBirthPeselPosition = 10;
 
         String peselSixLetters = "";
-        for (int peselCaret = decadeOfBirthPosition; peselCaret < dayOfBirthPosition; peselCaret++) {
-            char currentChar = dateString.charAt(peselCaret);
+        for (int peselPosition = decadeOfBirthPeselPosition; peselPosition < dayOfBirthPeselPosition; peselPosition++) {
+            char currentChar = dateString.charAt(peselPosition);
             if (currentChar == '-') {
                 continue;
             }
