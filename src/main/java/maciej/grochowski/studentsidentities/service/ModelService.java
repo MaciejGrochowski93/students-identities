@@ -19,40 +19,6 @@ import java.util.List;
 public class ModelService {
 
     private final StudentService studentService;
-    private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
-
-
-    public String addStudentCreationAttributesToModel(StudentCreationDTO studentDTOForm,
-                                                      AddressListTransfer addressTransfer, Model model) {
-        try {
-            studentService.addStudent(studentDTOForm, addressTransfer);
-        } catch (TooYoungException youthExc) {
-            model.addAttribute("youthExc", youthExc.getMessage());
-            LOGGER.error(youthExc.getMessage());
-            return "new_student";
-        } catch (PeselDateNotMatchException peselDateExc) {
-            model.addAttribute("peselDateExc", peselDateExc.getMessage());
-            LOGGER.error(peselDateExc.getMessage());
-            return "new_student";
-        }
-        return "redirect:/student";
-    }
-
-    public String addStudentUpdateAttributesToModel(StudentCreationDTO studentDTO, int studentId, Model model) {
-        try {
-            studentService.updateStudent(studentId, studentDTO);
-        } catch (TooYoungException youthExc) {
-            model.addAttribute("youthExc", youthExc.getMessage());
-            LOGGER.error(youthExc.getMessage());
-            return "update_student";
-        } catch (PeselDateNotMatchException peselDateExc) {
-            model.addAttribute("peselDateExc", peselDateExc.getMessage());
-            LOGGER.error(peselDateExc.getMessage());
-            return "update_student";
-        }
-        return "redirect:/student";
-    }
-
 
     public void addSortingAttributesToModel(Model model, int pageNr, String sortBy, String sortDirection) {
         String reverseDirection = sortDirection.equals("asc") ? "desc" : "asc";

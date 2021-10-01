@@ -6,9 +6,12 @@ import maciej.grochowski.studentsidentities.DTO.AddressListTransfer;
 import maciej.grochowski.studentsidentities.DTO.StudentCreationDTO;
 import maciej.grochowski.studentsidentities.entity.Address;
 import maciej.grochowski.studentsidentities.entity.Student;
+import maciej.grochowski.studentsidentities.exception.PeselDateNotMatchException;
+import maciej.grochowski.studentsidentities.exception.TooYoungException;
 import maciej.grochowski.studentsidentities.service.AddressService;
 import maciej.grochowski.studentsidentities.service.ModelService;
 import maciej.grochowski.studentsidentities.service.StudentService;
+import maciej.grochowski.studentsidentities.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,6 +21,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @AllArgsConstructor
@@ -28,6 +32,7 @@ public class StudentController {
     private final StudentService studentService;
     private final AddressService addressService;
     private final ModelService modelService;
+    private final Utils utils;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentController.class);
 
@@ -69,7 +74,19 @@ public class StudentController {
         if (studentResult.hasErrors() || addressResult.hasErrors()) {
             return "new_student";
         }
-        modelService.addStudentCreationAttributesToModel(studentDTOForm, addressTransfer, model);
+
+            studentService.addStudent(studentDTOForm, addressTransfer);
+        try {
+        }
+        catch (TooYoungException youthExc) {
+            model.addAttribute("youthExc", youthExc.getMessage());
+            LOGGER.error(youthExc.getMessage());
+        }
+        catch (PeselDateNotMatchException peselDateExc) {
+            model.addAttribute("peselDateExc", peselDateExc.getMessage());
+            LOGGER.error(peselDateExc.getMessage());
+        }
+
         return "redirect:/student";
     }
 
@@ -88,7 +105,16 @@ public class StudentController {
             return "update_student";
         }
 
-        modelService.addStudentUpdateAttributesToModel(studentDTO, id, model);
+        try {
+            studentService.updateStudent(id, studentDTO);
+        } catch (TooYoungException youthExc) {
+            model.addAttribute("youthExc", youthExc.getMessage());
+            LOGGER.error(youthExc.getMessage());
+        } catch (PeselDateNotMatchException peselDateExc) {
+            model.addAttribute("peselDateExc", peselDateExc.getMessage());
+            LOGGER.error(peselDateExc.getMessage());
+        }
+
         return "redirect:/student";
     }
 
@@ -150,5 +176,10 @@ public class StudentController {
         }
         addressService.updateAddressesOfStudentId(id, listTransfer);
         return "redirect:/student";
+    }
+
+    @GetMapping("/previousPage")
+    public String returnToPreviousPage(HttpServletRequest request) {
+        return utils.getPreviousPageByRequest(request).orElse("/");
     }
 }
